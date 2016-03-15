@@ -1,0 +1,18 @@
+{
+  "name": "stuteboards",
+  "version": "1.0.0",
+  "description": "The code that powers the StuteBoards website.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.4sense.eu:zdonato/StuteBoards.git"
+  },
+  "author": "Team Won",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
