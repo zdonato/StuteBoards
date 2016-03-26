@@ -1,5 +1,4 @@
 // Main app logic.
-
 var express = require("express");
 var http    = require("http");
 var path    = require("path");
@@ -10,11 +9,12 @@ var port = normalizePort(process.env.PORT || '9000');
 app.set('port', port);
 
 // Load all routes.
-var index = require("./REST/routes/index.js");
-
+var index           = require("./REST/routes/index.js");
+var registration    = require("./REST/routes/registration");
 
 // Tell the app to use the routes.
 app.use("/", index);
+app.use("/rest/registration", registration);
 
 // Serve static files from directories.
 app.use('/', express.static(path.join(__dirname, 'public')));
