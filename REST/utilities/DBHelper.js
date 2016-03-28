@@ -11,6 +11,8 @@ define(function (require) {
     var timestamp       = require('../utilities/timestamp.js');
     var crypto          = require('crypto');
     var bcrypt          = require('bcrypt');
+    var nodemailer      = require('nodemailer');
+    var transporter     = nodemailer.createTransport('smtps://stuteboards%40gmail.com:pass@StuteBoards123@');
     const saltRounds    = 10;
 
     // Constructor. Call with the database you want to connect to.
@@ -77,7 +79,7 @@ define(function (require) {
                             connection.release();
                             callback({
                                 status : "error",
-                                error: "An Error has occurred registering. Please try again1."
+                                error: "An Error has occurred registering. Please try again."
                             });
                             return;
                         }
@@ -89,13 +91,22 @@ define(function (require) {
                                 connection.release();
                                 callback({
                                     status : "error",
-                                    error: "An Error has occurred registering. Please try again2."
+                                    error: "An Error has occurred registering. Please try again."
                                 });
                                 return;
                             }
 
                             console.log(timestamp() + "Successfully added user " + email + " with confirmation code "
                                 + confirmCode);
+
+                            // Mail the confirmation code to the user.
+                            var mailOptions = {
+                                from: 'Stute Boards <stuteboards@gmail.com>',
+                                to: email,
+                                subject: 'Confirm Your Stute Boards Account!',
+                                html:  
+                            };
+
                             connection.release();
                             callback({ status : 200 });
                             return;
@@ -131,7 +142,7 @@ define(function (require) {
                     if (err) {
                         console.log(timestamp() + err);
                         var response = {
-                            error : "Error retrieving user"
+                            error : "Error user does not exist."
                         };
                         callback(response);
                         return;
@@ -163,7 +174,24 @@ define(function (require) {
                     var expire_time = moment().add(1, 'days').format();
                     console.log(timestamp() + "expire_time: " + expire_time);
 
-                    
+                    var insertSql = "INSERT INTO `users` (`token`, `expire_time`) VALUES (?, ?) WHERE email = ?";
+                    connection.query(insertSql, [token, expire_time, email], function (err, reuslt) {
+                        if (err) {
+                            console.log(timestamp() + err);
+                            var response = {
+                                error : "Error user cannot be authenticated"
+                            };
+                            callback(response);
+                            return;
+                        }
+
+                        var response = {
+                            token : token
+                        };
+                        callback(response);
+                        return;
+                    });
+
                 });
             });
         }
