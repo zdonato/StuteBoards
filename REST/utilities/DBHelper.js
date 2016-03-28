@@ -61,6 +61,7 @@ define(function (require) {
                     var response = {
                         error : "Error connecting to database"
                     };
+                    connection.release();
                     callback(response);
                     return;
                 }
@@ -120,9 +121,28 @@ define(function (require) {
                                 html : 'blah'
                             };
 
-                            connection.release();
-                            callback({ status : 200 });
-                            return;
+                            transporter.verify(function(error, success) {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    console.log('Server is ready to take our messages');
+                                }
+                            });
+
+                            transporter.sendMail(mailOptions, function (err, info) {
+
+                                if (err){
+                                    console.log(timestamp() + err);
+                                    connection.release();
+                                    callback({ status : 500 });
+                                    return;
+                                }
+
+                                console.log(timestamp() + info.response);
+                                connection.release();
+                                callback({status : 200});
+                                return;
+                            });
                         });
                     });
                 });
@@ -157,6 +177,7 @@ define(function (require) {
                     var response = {
                         error : "Error connecting to database"
                     };
+                    connection.release();
                     callback(response);
                     return;
                 }
@@ -169,6 +190,7 @@ define(function (require) {
                         var response = {
                             error : "Error user does not exist."
                         };
+                        connection.release();
                         callback(response);
                         return;
                     }
@@ -178,6 +200,7 @@ define(function (require) {
                         var response = {
                             error: "Error user " + email + " does not exist."
                         };
+                        connection.release();
                         callback(response);
                         return;
                     }
@@ -189,6 +212,7 @@ define(function (require) {
                         var response = {
                             error : "User " + email + " has already been confirmed. Please log in."
                         };
+                        connection.release();
                         callback(response);
                         return;
                     }
@@ -200,6 +224,7 @@ define(function (require) {
                         var response = {
                             error: "Error invalid code"
                         };
+                        connection.release();
                         callback(response);
                         return;
                     }
@@ -217,6 +242,7 @@ define(function (require) {
                             var response = {
                                 error : "Error user cannot be authenticated"
                             };
+                            connection.release();
                             callback(response);
                             return;
                         }
@@ -224,6 +250,7 @@ define(function (require) {
                         var response = {
                             token : token
                         };
+                        connection.release();
                         callback(response);
                         return;
                     });
@@ -259,6 +286,7 @@ define(function (require) {
                     var response = {
                         error : "Error connecting to database"
                     };
+                    connection.release();
                     callback(response);
                     return;
                 }
@@ -270,6 +298,7 @@ define(function (require) {
                         var response = {
                             error : "Error: Incorrect username or password"
                         };
+                        connection.release();
                         callback(response);
                         return;
                     }
@@ -278,19 +307,32 @@ define(function (require) {
                     {
                         console.log(timestamp() + "User " + email + " does not exist.");
                         var response = {
-                            error: "Error user " + email + " does not exist."
+                            error: "Error: Incorrect username or password"
                         };
+                        connection.release();
                         callback(response);
                         return;
                     }
 
-                    bcrypt.compare(password, results[0].password, function (err, result){
+                    if (result.length != 1)
+                    {
+                        console.log(timestamp() + "Error selecting user " + email);
+                        var response = {
+                            error: "Error logging in, please try again."
+                        };
+                        connection.release();
+                        callback(response);
+                        return;
+                    }
+
+                    bcrypt.compare(password, result[0].password, function (err, result) {
                         if (err)
                         {
                             console.log(timestamp() + err);
                             var response = {
-                                error : "Error: There was an error trying to login."
+                                error : "Error incorrect username or password"
                             };
+                            connection.release();
                             callback(response);
                             return;
                         }
@@ -299,8 +341,15 @@ define(function (require) {
                         {
                             console.log(timestamp() + "Error logging in user " + email + ". User does not exist or " +
                                 "incorrect combo.");
+                            var response = {
+                                error : "Error incorrect username or password"
+                            };
+                            connection.release();
+                            callback(response);
+                            return;
                         }
 
+                        console.log(timestamp() + "User " + email + " has been authenticated.");
                         // Username + password combo is correct. Generate auth token.
                         // User is confirmed, generate auth token.
                         var token = crypto.randomBytes(32).toString('hex');
@@ -315,18 +364,21 @@ define(function (require) {
                                 var response = {
                                     error : "Error user cannot be authenticated"
                                 };
+                                connection.release();
                                 callback(response);
                                 return;
                             }
 
                             var response = {
-                                token : token
+                                token : token,
+                                id : result[0].id
                             };
+                            connection.release();
                             callback(response);
                             return;
                         });
-                    })
-                });
+                    });
+                })
             });
         }
     };
