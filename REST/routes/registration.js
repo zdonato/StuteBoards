@@ -1,14 +1,10 @@
 /**
- * @route("/registration")
- * @method("POST")
+ * Handles all of the registration routes.
+ * { "/registration", "/registration/code" }
  *
- * Handles the registration route.
- * Expects JSON object with email and encrypted passsword.
  */
+
 var express     = require('express');
-var mysql       = require('mysql');
-var _           = require('lodash');
-var moment      = require('moment');
 var bodyParser  = require('body-parser');
 var router      = express.Router();
 var DBHelper    = require('../utilities/DBHelper.js');
@@ -17,6 +13,13 @@ var timestamp   = require('../utilities/timestamp');
 var DB_HELPER = new DBHelper('stuteboards_users');
 var jsonParser  = bodyParser.json();
 
+/**
+ * @route("/registration")
+ * @method("POST")
+ *
+ * Handles the registration route.
+ * Expects JSON object with email and encrypted passsword.
+ */
 router.post("/", jsonParser, function(req, res)
 {
     console.log(timestamp() + "POST request made to /rest/registration.");
@@ -31,6 +34,13 @@ router.post("/", jsonParser, function(req, res)
     });
 });
 
+/**
+ * @route("/registration/code")
+ * @method("POST")
+ *
+ * Handles the confirm code registration route.
+ * Expects JSON object with email and 10 digit code.
+ */
 router.post("/code", jsonParser, function(req, res){
     console.log(timestamp() + "POST request made to /rest/registration/code.");
     DB_HELPER.confirmUser(req.body.email, req.body.code, function (response)

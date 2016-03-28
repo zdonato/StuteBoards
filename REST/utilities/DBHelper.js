@@ -13,7 +13,7 @@ define(function (require) {
     var bcrypt          = require('bcrypt');
     const saltRounds    = 10;
 
-    // Constructor.
+    // Constructor. Call with the database you want to connect to.
     function DBHelper(database) {
         this.pool = mysql.createPool({
             host : 'localhost',
