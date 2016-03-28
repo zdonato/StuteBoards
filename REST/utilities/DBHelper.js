@@ -9,6 +9,7 @@ define(function (require) {
     var mysql           = require('mysql');
     var _               = require('lodash');
     var timestamp       = require('../utilities/timestamp.js');
+    var moment          = require('moment');
     var crypto          = require('crypto');
     var bcrypt          = require('bcrypt');
     var nodemailer      = require('nodemailer');
@@ -20,6 +21,7 @@ define(function (require) {
         this.pool = mysql.createPool({
             host : 'localhost',
             user : 'root',
+            port : 8889,
             password : 'root',
             database : database
         });
@@ -39,9 +41,20 @@ define(function (require) {
          */
         addUser : function (email, password, callback)
         {
-            console.log(timestamp() +  "Adding user " + email);
-            var response = {};
 
+            // Extract the domain name to make sure it is stevens.edu
+            var domain = email.replace(/.*@/, "");
+
+            if (domain != "stevens.edu"){
+                console.log(timestamp() + "Error: Trying to register without a stevens email address.");
+                var response = {
+                    error : "Error: " + email + " is not a stevens email address."
+                };
+                callback(response);
+                return;
+            }
+
+            console.log(timestamp() +  "Adding user " + email);
             this.pool.getConnection(function (err, connection) {
                 if (err) {
                     console.log(timestamp() + err);
@@ -104,7 +117,7 @@ define(function (require) {
                                 from: 'Stute Boards <stuteboards@gmail.com>',
                                 to: email,
                                 subject: 'Confirm Your Stute Boards Account!',
-                                html:  
+                                html : 'blah'
                             };
 
                             connection.release();
@@ -125,7 +138,19 @@ define(function (require) {
          */
         confirmUser : function(email, code, callback)
         {
-            console.log("Confirming user " + email);
+            // Extract the domain name to make sure it is stevens.edu
+            var domain = email.replace(/.*@/, "");
+
+            if (domain != "stevens.edu"){
+                console.log(timestamp() + "Error: Trying to register without a stevens email address.");
+                var response = {
+                    error : "Error: " + email + " is not a stevens email address."
+                };
+                callback(response);
+                return;
+            }
+
+            console.log(timestamp() + "Confirming user " + email);
             this.pool.getConnection( function(err, connection) {
                 if (err) {
                     console.log(timestamp() + err);
@@ -137,7 +162,7 @@ define(function (require) {
                 }
                 console.log(timestamp() + "Successfully connected to users.");
 
-                var sql = "SELECT * from `users` WHERE email = ?";
+                var sql = "SELECT `confirmation`, `is_confirmed` FROM `users` WHERE email = ?";
                 connection.query(sql, email, function(err, result) {
                     if (err) {
                         console.log(timestamp() + err);
@@ -157,8 +182,19 @@ define(function (require) {
                         return;
                     }
 
+                    // Check if the user has been confirmed already.
+                    if (result[0].is_confirmed)
+                    {
+                        console.log(timestamp() + "User " + email + " has already been confirmed.");
+                        var response = {
+                            error : "User " + email + " has already been confirmed. Please log in."
+                        };
+                        callback(response);
+                        return;
+                    }
+
                     // User exists, check the confirmation code.
-                    if (result.confirmation != code)
+                    if (result[0].confirmation != code)
                     {
                         console.log(timestamp() + "Code " + code + " is not correct for " + email);
                         var response = {
@@ -174,7 +210,7 @@ define(function (require) {
                     var expire_time = moment().add(1, 'days').format();
                     console.log(timestamp() + "expire_time: " + expire_time);
 
-                    var insertSql = "INSERT INTO `users` (`token`, `expire_time`) VALUES (?, ?) WHERE email = ?";
+                    var insertSql = "UPDATE `users` SET `token`=?, `expire_time`=? WHERE email = ?;";
                     connection.query(insertSql, [token, expire_time, email], function (err, reuslt) {
                         if (err) {
                             console.log(timestamp() + err);
@@ -192,6 +228,104 @@ define(function (require) {
                         return;
                     });
 
+                });
+            });
+        },
+
+        /**
+         * Function to login a user.
+         * @param email
+         * @param password
+         * @param callback
+         */
+        loginUser : function (email, password, callback)
+        {
+            // Extract the domain name to make sure it is stevens.edu
+            var domain = email.replace(/.*@/, "");
+
+            if (domain != "stevens.edu"){
+                console.log(timestamp() + "Error: Trying to register without a stevens email address.");
+                var response = {
+                    error : "Error: Incorrect username or password."
+                };
+                callback(response);
+                return;
+            }
+
+            console.log(timestamp() + "Attempt to login user " + email);
+            this.pool.getConnection(function (err, connection){
+                if (err) {
+                    console.log(timestamp() + err);
+                    var response = {
+                        error : "Error connecting to database"
+                    };
+                    callback(response);
+                    return;
+                }
+
+                var sql = "SELECT `password`, `id` FROM `users` WHERE `email`=?";
+                connection.query(sql, email, function(err, result) {
+                    if (err) {
+                        console.log(timestamp() + err);
+                        var response = {
+                            error : "Error: Incorrect username or password"
+                        };
+                        callback(response);
+                        return;
+                    }
+
+                    if (_.isEmpty(result))
+                    {
+                        console.log(timestamp() + "User " + email + " does not exist.");
+                        var response = {
+                            error: "Error user " + email + " does not exist."
+                        };
+                        callback(response);
+                        return;
+                    }
+
+                    bcrypt.compare(password, results[0].password, function (err, result){
+                        if (err)
+                        {
+                            console.log(timestamp() + err);
+                            var response = {
+                                error : "Error: There was an error trying to login."
+                            };
+                            callback(response);
+                            return;
+                        }
+
+                        if (!result)
+                        {
+                            console.log(timestamp() + "Error logging in user " + email + ". User does not exist or " +
+                                "incorrect combo.");
+                        }
+
+                        // Username + password combo is correct. Generate auth token.
+                        // User is confirmed, generate auth token.
+                        var token = crypto.randomBytes(32).toString('hex');
+                        console.log(timestamp() + "token: " + token);
+                        var expire_time = moment().add(1, 'days').format();
+                        console.log(timestamp() + "expire_time: " + expire_time);
+
+                        var insertSql = "UPDATE `users` SET `token`=?, `expire_time`=? WHERE email = ?;";
+                        connection.query(insertSql, [token, expire_time, email], function (err, reuslt) {
+                            if (err) {
+                                console.log(timestamp() + err);
+                                var response = {
+                                    error : "Error user cannot be authenticated"
+                                };
+                                callback(response);
+                                return;
+                            }
+
+                            var response = {
+                                token : token
+                            };
+                            callback(response);
+                            return;
+                        });
+                    })
                 });
             });
         }

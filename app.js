@@ -10,11 +10,13 @@ app.set('port', port);
 
 // Load all routes.
 var index           = require("./REST/routes/index.js");
-var registration    = require("./REST/routes/registration");
+var registration    = require("./REST/routes/registration.js");
+var login           = require("./REST/routes/login.js");
 
 // Tell the app to use the routes.
 app.use("/", index);
 app.use("/rest/registration", registration);
+app.use("/rest/login", login);
 
 // Serve static files from directories.
 app.use('/', express.static(path.join(__dirname, 'public')));

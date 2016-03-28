@@ -18,7 +18,7 @@ var jsonParser  = bodyParser.json();
  * @method("POST")
  *
  * Handles the registration route.
- * Expects JSON object with email and encrypted passsword.
+ * Expects JSON object with email and encrypted password.
  */
 router.post("/", jsonParser, function(req, res)
 {
