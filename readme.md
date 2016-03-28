@@ -13,7 +13,7 @@
 #### Return
 ```
 {
-    "status" : "success" or "error"
+    "status" : "success or error",
     "error" : "message if error"
 }
 ```
