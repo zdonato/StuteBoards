@@ -13,7 +13,7 @@ define(function (require) {
     var crypto          = require('crypto');
     var bcrypt          = require('bcrypt');
     var nodemailer      = require('nodemailer');
-    var transporter     = nodemailer.createTransport('smtps://stuteboards%40gmail.com:pass@StuteBoards123@');
+    var transporter     = nodemailer.createTransport('smtps://stuteboards%40gmail.com:StuteBoards123@@smtp.gmail.com');
     const saltRounds    = 10;
 
     // Constructor. Call with the database you want to connect to.
@@ -115,34 +115,57 @@ define(function (require) {
 
                             // Mail the confirmation code to the user.
                             var mailOptions = {
-                                from: 'Stute Boards <stuteboards@gmail.com>',
-                                to: email,
                                 subject: 'Confirm Your Stute Boards Account!',
-                                html : 'blah'
+                                html : "<html> <body> <p> Welcome to Stute Boards! </p><br>"
+                                    + "<p> Your confirmation code is: {{confirmCode}}</p>"
+                                    + "<p> Please enter the code on the registration page to confirm your account. </p>"
+                                     + "</body> </html>"
                             };
 
-                            transporter.verify(function(error, success) {
-                                if (error) {
-                                    console.log(error);
-                                } else {
-                                    console.log('Server is ready to take our messages');
+                            var sendConfirmation = transporter.templateSender(
+                                mailOptions,
+                                {
+                                    from : 'Stute Boards <stuteboards@gmail.com>'
                                 }
-                            });
+                            );
 
-                            transporter.sendMail(mailOptions, function (err, info) {
-
-                                if (err){
+                            sendConfirmation({
+                                to : email
+                            },{
+                                confirmCode : confirmCode
+                            }, function (err, info){
+                                if (err) {
                                     console.log(timestamp() + err);
                                     connection.release();
-                                    callback({ status : 500 });
+                                    callback({status : 200});
                                     return;
                                 }
+                                else
+                                {
+                                    console.log(timestamp() + "Email send to " + email + " with confirmation code "
+                                        + confirmCode);
+                                    console.log(timestamp() + info.response);
+                                    connection.release();
+                                    callback({status : 200});
+                                    return;
+                                }
+                            }
+                            );
 
-                                console.log(timestamp() + info.response);
-                                connection.release();
-                                callback({status : 200});
-                                return;
-                            });
+                            //transporter.sendMail(mailOptions, function (err, info) {
+                            //
+                            //    if (err){
+                            //        console.log(timestamp() + err);
+                            //        connection.release();
+                            //        callback({ status : 500 });
+                            //        return;
+                            //    }
+                            //
+                            //    console.log(timestamp() + info.response);
+                            //    connection.release();
+                            //    callback({status : 200});
+                            //    return;
+                            //});
                         });
                     });
                 });
