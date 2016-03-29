@@ -380,8 +380,8 @@ define(function (require) {
                         var expire_time = moment().add(1, 'days').format();
                         console.log(timestamp() + "expire_time: " + expire_time);
 
-                        var insertSql = "UPDATE `users` SET `token`=?, `expire_time`=? WHERE email = ?;";
-                        connection.query(insertSql, [token, expire_time, email], function (err, reuslt) {
+                        var insertSql = "UPDATE `users` SET `token`=?, `expire_time`=? WHERE `email` = ?; ";
+                        connection.query(insertSql, [token, expire_time, email, email], function (err, result) {
                             if (err) {
                                 console.log(timestamp() + err);
                                 var response = {
@@ -392,13 +392,38 @@ define(function (require) {
                                 return;
                             }
 
-                            var response = {
-                                token : token,
-                                id : result[0].id
-                            };
-                            connection.release();
-                            callback(response);
-                            return;
+                            var selectSql =  "SELECT `id`, `token` FROM `users` WHERE `email` = ?;"
+                            connection.query(selectSql, email, function (err, result){
+                                if (err) {
+                                    console.log(timestamp() + err);
+                                    var response = {
+                                        error : "Error user cannot be authenticated"
+                                    };
+                                    connection.release();
+                                    callback(response);
+                                    return;
+                                }
+
+                                if (_.isEmpty(result))
+                                {
+                                    console.log(timestamp() + "Error selecting user " + email);
+                                    var response = {
+                                        error : "Error user cannot be authenticated"
+                                    };
+                                    connection.release();
+                                    callback(response);
+                                    return;
+                                }
+
+                                var response = {
+                                    token : token,
+                                    id : result[0].id
+                                };
+
+                                connection.release();
+                                callback(response);
+                                return;
+                            });
                         });
                     });
                 })
