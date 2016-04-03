@@ -1,0 +1,148 @@
+/*4chan peach: #FFCCAA*/
+/*Stevens Red: #A9002F*/
+*
+{
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px; 
+}
+
+body
+{
+	background: -webkit-linear-gradient(lightgray, gray);
+}
+
+.anon
+{
+	color: green;
+	font-weight: bolder;
+}
+
+hr
+{
+	border: none;
+  	border-top: 1px solid #A9002F;
+  	width: 95%;
+  	margin: 0 auto;
+}
+
+header
+{
+	width: 100%;
+}
+
+nav
+{
+	text-align: center;
+	color: #A9002F;
+}
+
+nav a:link 
+{
+    color: #A9002F;
+}
+
+nav a:visited 
+{
+    color: #A9002F;
+}
+
+header h1,h2
+{
+	text-align: center;
+	color: #A9002F;
+}
+
+#new-thread-submit
+{
+	display: table;
+	width: 50%;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+#new-image-submit
+{
+	height: 100px;
+	width: 20%;
+	background-color: red;
+	float: left;
+}
+
+#new-text-submit
+{
+	float: right;
+	width: 79%;
+	height: 100px;
+}
+
+.thread
+{
+	width: 50%;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+.thread .threadstart
+{
+	width: 100%;
+	background-color: white;
+	display: table;
+}
+
+.thread .threadstart img
+{
+	width: 20%;
+	height: 100px; 
+	/*change to auto for any actual image*/
+	float: left;
+}
+
+.thread .threadstart p
+{
+	width: calc(80% - 20px);
+	float: right;
+	padding: 10px;
+}
+
+.thread .threadcomment
+{
+	margin: 0 auto;
+	width: 80%;
+	background-color: lightgray;
+	display: table;
+	border-left: 1px solid #A9002F;
+	border-right: 1px solid #A9002F;
+	border-bottom: 1px solid #A9002F;
+}
+
+.thread .threadcomment img
+{
+	width: 20%;
+	height: 80px; 
+	/*change to auto for any actual image*/
+	float: left;
+}
+
+.thread .threadcomment p
+{
+	width: calc(80% - 20px);
+	float: right;
+	padding: 10px;
+}
+
+footer
+{
+	text-align: center;
+}
+
+/*Login page now*/
+#login-section
+{
+	text-align: center;
+}
+
+#login-section input
+{
+	font-size: 1.5em;
+}

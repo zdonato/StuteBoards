@@ -1,0 +1,129 @@
+<!-- Authorized Html -->
+<html lang="en">
+  <head>
+  <!-- make sure user is logged in -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stuteboards::
+    <!-- page title here, get via angular -->
+    </title>
+    <link href="../css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <nav>
+        <!-- Construct board list from angular query -->
+        | <a href="http://i.imgur.com/Avtmwu4.png">Engineering</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">Mathmatics</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">Computer Science</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">CAL</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">Cybersecurity</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">Business</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">Science</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">General Discussion</a> |
+      </nav>
+      <nav>
+        <!-- Construct board list from angular query -->
+        <!-- Possibly sort by number automatically? -->
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS115</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS135</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS181</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS182</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS284</a>
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS334</a>
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS347</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS383</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS385</a> 
+        | <a href="http://i.imgur.com/Avtmwu4.png">CS392</a> |
+      </nav>
+      <!-- Page title of board category here, get via angular -->
+      <h2>Computer Science</h2>
+      <!-- Page title of board itself here (AKA class name), get via angular -->
+      <h1>CS347</h1>
+    </header>
+
+    <hr>
+
+    <section id="new-thread-submit">
+      <div id="new-image-submit">
+      <button>Upload</button>
+      Or drag and drop
+      </div>
+      <textarea id="new-text-submit">Submit your post!</textarea>
+      <!-- ajax post sent request -->
+    </section>
+
+    <hr>
+
+    <section id="posts">
+    <!-- angular ng-repeat, request data back for posts on a given page-->
+      <article class="thread">
+        <div class="threadstart">
+          <div class="postinfo">
+            <span class="posttime">03/17/2015 18:47:13</span>
+            <span class="postnumber">No.604444021</span>
+          </div>
+          <img src="http://i.imgur.com/Avtmwu4.png" alt="Post Image">
+          <p>Post text goes here. Could be in greentext as well. Blibbity blobbity bloopity</p>
+        </div>
+        <div class="threadcomment">
+          <div class="postinfo">
+            <span class="posttime">03/17/2015 18:47:13</span>
+            <span class="postnumber">No.604444021</span>
+          </div>
+          <img src="http://i.imgur.com/Avtmwu4.png" alt="Comment Image">
+          <p>Lorem ipsum dolor sit amet, mei tation noster insolens ei, sumo audire ea vim, te nemore quodsi labores eum. Ut vide fastidii vel. Causae diceret insolens</p>
+        </div>
+        <div class="threadcomment">
+          <div class="postinfo">
+            <span class="posttime">03/17/2015 18:47:13</span>
+            <span class="postnumber">No.604444021</span>
+          </div>
+          <img src="http://i.imgur.com/Avtmwu4.png" alt="Comment Image">
+          <p>Lorem ipsum dolor sit amet, mei tation noster insolens ei, sumo audire ea vim, te nemore quodsi labores eum. Ut vide fastidii vel. Causae diceret insolens</p>
+        </div>
+      </article>
+
+      <article class="thread">
+        <div class="threadstart">
+          <div class="postinfo">
+            <span class="posttime">03/17/2015 18:47:13</span>
+            <span class="postnumber">No.604444021</span>
+          </div>
+          <img src="http://i.imgur.com/Avtmwu4.png" alt="Post Image">
+          <p>Post text goes here. Could be in greentext as well. Blibbity blobbity bloopity</p>
+        </div>
+        <div class="threadcomment">
+          <div class="postinfo">
+            <span class="posttime">03/17/2015 18:47:13</span>
+            <span class="postnumber">No.604444021</span>
+          </div>
+          <img src="http://i.imgur.com/Avtmwu4.png" alt="Comment Image">
+          <p>Lorem ipsum dolor sit amet, mei tation noster insolens ei, sumo audire ea vim, te nemore quodsi labores eum. Ut vide fastidii vel. Causae diceret insolens</p>
+        </div>
+        <div class="threadcomment">
+          <div class="postinfo">
+            <span class="posttime">03/17/2015 18:47:13</span>
+            <span class="postnumber">No.604444021</span>
+          </div>
+          <img src="http://i.imgur.com/Avtmwu4.png" alt="Comment Image">
+          <p>Lorem ipsum dolor sit amet, mei tation noster insolens ei, sumo audire ea vim, te nemore quodsi labores eum. Ut vide fastidii vel. Causae diceret insolens</p>
+        </div>
+      </article>
+
+    </section>
+
+    <hr>
+
+    <footer>
+      <!-- Construct list of page numbers based on request, manipulate as needed to fit-->
+      [<a href="http://i.imgur.com/Avtmwu4.png">1</a>,
+      <a href="http://i.imgur.com/Avtmwu4.png"> 2</a>,
+      <a href="http://i.imgur.com/Avtmwu4.png"> 3</a>,
+      <a href="http://i.imgur.com/Avtmwu4.png"> 4</a>,
+      <a href="http://i.imgur.com/Avtmwu4.png"> 5</a>,
+      <a href="http://i.imgur.com/Avtmwu4.png"> 6</a>]
+    </footer>
+  </body>
+</html>

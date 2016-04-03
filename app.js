@@ -5,7 +5,7 @@ var path    = require("path");
 var app     = express();
 
 // Port to use for server.
-var port = normalizePort(process.env.PORT || '9000');
+var port = normalizePort(process.env.PORT || '9001');
 app.set('port', port);
 
 // Load all routes.
