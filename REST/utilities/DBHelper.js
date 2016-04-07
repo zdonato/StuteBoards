@@ -78,7 +78,7 @@ define(function (require) {
                 console.log(timestamp() + "Successfully connected to users.");
 
                 // Check if user exists already.
-                var sql = 'SELECT * FROM users WHERE email = ?';
+                var sql = 'SELECT `email` FROM users WHERE email = ?';
                 connection.query(sql, email, function (err, result)
                 {
                     if (!_.isEmpty(result))
@@ -428,8 +428,102 @@ define(function (require) {
         /**
          * Method to create a board.
          * @param board_name
-         * @param created_by 
-         * @callback
+         * @param created_by
+         * @param callback
+         */
+        createBoard : function(board_name, created_by, callback)
+        {
+            if (_.isUndefined(board_name) || _.isUndefined((created_by)))
+            {
+                console.log(timestamp() + "Error: board name or created by undefined");
+                var response = {
+                    error : "Error: No board name supplied, or created by not supplied"
+                };
+                callback(response);
+                return;
+            }
+
+            console.log(timestamp() + "Connecting to boards...");
+            this.pool.getConnection(function (err, connection) {
+                if (err) {
+                    console.log(timestamp() + err);
+                    var response = {
+                        error : "Error connecting to database"
+                    };
+                    connection.release();
+                    callback(response);
+                    return;
+                }
+
+                // First check if the board name exists already
+                var sql = "SELECT `name` FROM `boards` WHERE `name` = ?";
+                connection.query(sql, board_name, function (err, result){
+                    if (err)
+                    {
+                        console.log(timestamp() + "Error connecting to database");
+                        var response = {
+                            error : "Error connecting to database"
+                        };
+                        callback(response);
+                        return;
+                    }
+
+                    if (!_.isEmpty(result))
+                    {
+                        console.log(timestamp() + "Error: Board " + board_name + " already exists.");
+                        connection.release();
+                        callback({
+                            status : "error",
+                            error : "Error board already exists with name  " + board_name
+                        });
+                        return;
+                    }
+
+                    // Board does not exist, create it.
+                    var insertSql = "INSERT INTO `boards` (`id`, `name`, `created_by`, `created_on`) " +
+                        "VALUES ( (SELECT UUID()), ?, ?, ?)";
+
+                    // Generate created time.
+                    var created_on = moment().format();
+                    connection.query(insertSql, [board_name, created_by, created_on], function(err, result) {
+                        if (err)
+                        {
+                            console.log(timestamp() + "Error creating board " + board_name);
+                            var response = {
+                                error : "Error creating board " + board_name
+                            };
+                            callback(response);
+                            return;
+                        }
+
+                        // Query for the newly created board to send back the ID.
+                        var sql = "SELECT `id`, `name` FROM `boards` WHERE `name` = ?";
+                        connection.query(sql, board_name, function (err, result){
+                            if (err || _.isEmpty(result))
+                            {
+                                console.log(timestamp() + "Error creating board " + board_name);
+                                var response = {
+                                    error : "Error creating board " + board_name
+                                };
+                                callback(response);
+                                return;
+                            }
+
+                            var response = {
+                                board_name : result[0].name,
+                                id : result[0].id
+                            };
+
+                            callback(response);
+                            return;
+                        });
+                    });
+                });
+            });
+        }
+
+        /**
+         * Method get a user by ID.
          */
     };
 

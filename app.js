@@ -12,11 +12,13 @@ app.set('port', port);
 var index           = require("./REST/routes/index.js");
 var registration    = require("./REST/routes/registration.js");
 var login           = require("./REST/routes/login.js");
+var boards          = require("./REST/routes/boards.js");
 
 // Tell the app to use the routes.
 app.use("/", index);
 app.use("/rest/registration", registration);
 app.use("/rest/login", login);
+app.use("/rest/board", boards);
 
 // Serve static files from directories.
 app.use('/', express.static(path.join(__dirname, 'public')));
