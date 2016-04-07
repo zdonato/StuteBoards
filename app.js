@@ -22,6 +22,7 @@ app.use("/rest/board", boards);
 
 // Serve static files from directories.
 app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 // Start the server.
 var server = http.createServer(app);
