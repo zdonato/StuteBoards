@@ -474,7 +474,7 @@ define(function (require) {
                         connection.release();
                         callback({
                             status : "error",
-                            error : "Error board already exists with name  " + board_name
+                            error : "Error board already exists with name " + board_name
                         });
                         return;
                     }
@@ -514,17 +514,54 @@ define(function (require) {
                                 id : result[0].id
                             };
 
+                            console.log(timestamp() + "Created board " + board_name + " with id " + response.id);
+
                             callback(response);
                             return;
                         });
                     });
                 });
             });
-        }
+        },
 
         /**
-         * Method get a user by ID.
+         * Method get all boards.
+         * @param callback
          */
+        getAllBoards : function(callback) {
+            var sql = "SELECT `name`, `id`, `created_on` FROM `boards`";
+            this.pool.getConnection(function (err, connection) {
+
+                if (err) {
+                    console.log(timestamp() + err);
+                    var response = {
+                        error : "Error connecting to database"
+                    };
+                    connection.release();
+                    callback(response);
+                    return;
+                }
+
+                connection.query(sql, function (err, result) {
+                    if (err || _.isEmpty(result))
+                    {
+                        console.log(timestamp() + "Error getting all boards");
+                        var response = {
+                            error : "Error retrieving all boards"
+                        };
+                        callback(response);
+                        return;
+                    }
+
+                    var response = {
+                        boards : result
+                    };
+
+                    callback(response);
+                    return;
+                });
+            });
+        }
     };
 
     return DBHelper;
