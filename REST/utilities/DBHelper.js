@@ -42,6 +42,16 @@ define(function (require) {
         addUser : function (email, password, callback)
         {
 
+            if (_.isUndefined(email) || _.isUndefined((password)))
+            {
+                console.log(timestamp() + "Error: email or password is undefined.");
+                var response = {
+                    error : "Error: email or password is undefined."
+                };
+                callback(response);
+                return;
+            }
+
             // Extract the domain name to make sure it is stevens.edu
             var domain = email.replace(/.*@/, "");
 
@@ -84,7 +94,7 @@ define(function (require) {
                     console.log(timestamp() + "No user exists for " + email + ", creating now.");
                     // User does not exist. Add them to the DB.
                     var addUserSql = "INSERT INTO `users` (`email`, `password`, `id`, `confirmation`) " +
-                        "VALUES (?, ?, UUID(), ?)";
+                        "VALUES (?, ?, (SELECT UUID()), ?)";
                     var confirmCode = crypto.randomBytes(8).toString('hex');
                     bcrypt.hash(password, saltRounds, function(err, hash) {
                         if (err)
@@ -151,21 +161,6 @@ define(function (require) {
                                 }
                             }
                             );
-
-                            //transporter.sendMail(mailOptions, function (err, info) {
-                            //
-                            //    if (err){
-                            //        console.log(timestamp() + err);
-                            //        connection.release();
-                            //        callback({ status : 500 });
-                            //        return;
-                            //    }
-                            //
-                            //    console.log(timestamp() + info.response);
-                            //    connection.release();
-                            //    callback({status : 200});
-                            //    return;
-                            //});
                         });
                     });
                 });
@@ -258,7 +253,7 @@ define(function (require) {
                     var expire_time = moment().add(1, 'days').format();
                     console.log(timestamp() + "expire_time: " + expire_time);
 
-                    var insertSql = "UPDATE `users` SET `token`=?, `expire_time`=? WHERE email = ?;";
+                    var insertSql = "UPDATE `users` SET `token`=?, `expire_time`=?, `is_confirmed`=1 WHERE email = ?;";
                     connection.query(insertSql, [token, expire_time, email], function (err, reuslt) {
                         if (err) {
                             console.log(timestamp() + err);
@@ -428,7 +423,14 @@ define(function (require) {
                     });
                 })
             });
-        }
+        },
+
+        /**
+         * Method to create a board.
+         * @param board_name
+         * @param created_by 
+         * @callback
+         */
     };
 
     return DBHelper;
