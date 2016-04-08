@@ -1,0 +1,36 @@
+<!-- Will be under the LoginController angularjs Controller -->
+<header>
+  <h1>Register</h1>
+</header>
+
+<hr>
+
+<section id="login-section">
+  <form ng-submit="verifyAndRegister()">
+    <h2>Email to Login With</h2><br>
+    <input required type="email" name="email" ng-model="registrationformdata.email"><br>
+    <h2>Password</h2><br>
+    <input required type="password" name="password" ng-model="registrationformdata.password"><br>
+    <h2>Confirm Password</h2><br>
+    <input required type="password" name="password" ng-model="registrationformdata.conpassword"><br>
+    <button type="submit" id="submit" value="Submit">Register!</button>
+  </form>
+</section>
+
+<hr>
+
+<header>
+  <h1>Login</h1>
+</header>
+
+<section id="login-section">
+  <form ng-submit="verifyAndLogin()">
+    <h2>Email</h2><br>
+    <input required type="email" name="email" ng-model="loginformdata.email"><br>
+    <h2>Password</h2><br>
+    <input required type="password" name="password" ng-model="loginformdata.password"><br>
+    <button type="submit" id="submit" value="Submit">Login</button>
+  </form>
+</section>
+
+<hr>

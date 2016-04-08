@@ -1,0 +1,18 @@
+<!-- Will be under the LoginController angularjs Controller -->
+<header>
+  <h1>Confirm Account</h1>
+</header>
+
+<hr>
+
+<section id="login-section">
+  <form ng-submit="verifyAndConfirm()">
+    <h2>Email</h2><br>
+    <input required type="email" name="email" ng-model="confirmformdata.email"><br>
+    <h2>Code</h2><br>
+    <input required type="text" name="code" ng-model="confirmformdata.code"><br>
+    <button type="submit" id="submit" value="Submit">Confirm!</button>
+  </form>
+</section>
+
+<hr>
