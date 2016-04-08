@@ -18,7 +18,7 @@ var boards          = require("./REST/routes/boards.js");
 app.use("/", index);
 app.use("/rest/registration", registration);
 app.use("/rest/login", login);
-app.use("/rest/board", boards);
+app.use("/rest/boards", boards);
 
 // Serve static files from directories.
 app.use('/', express.static(path.join(__dirname, 'public')));

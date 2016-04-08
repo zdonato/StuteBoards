@@ -71,7 +71,6 @@ define(function (require) {
                     var response = {
                         error : "Error connecting to database"
                     };
-                    connection.release();
                     callback(response);
                     return;
                 }
@@ -286,6 +285,16 @@ define(function (require) {
         loginUser : function (email, password, callback)
         {
             // Extract the domain name to make sure it is stevens.edu
+            if (_.isUndefined(email) || _.isUndefined(password))
+            {
+                console.log(timestamp() + "Error: no email or password provided.");
+                var response = {
+                    error : "Error no credentials provided"
+                };
+                callback(response);
+                return;
+            }
+
             var domain = email.replace(/.*@/, "");
 
             if (domain != "stevens.edu"){
@@ -474,7 +483,7 @@ define(function (require) {
                         connection.release();
                         callback({
                             status : "error",
-                            error : "Error board already exists with name  " + board_name
+                            error : "Error board already exists with name " + board_name
                         });
                         return;
                     }
@@ -492,6 +501,7 @@ define(function (require) {
                             var response = {
                                 error : "Error creating board " + board_name
                             };
+                            connection.release();
                             callback(response);
                             return;
                         }
@@ -505,6 +515,7 @@ define(function (require) {
                                 var response = {
                                     error : "Error creating board " + board_name
                                 };
+                                connection.release();
                                 callback(response);
                                 return;
                             }
@@ -514,17 +525,108 @@ define(function (require) {
                                 id : result[0].id
                             };
 
+                            console.log(timestamp() + "Created board " + board_name + " with id " + response.id);
+                            connection.release();
                             callback(response);
                             return;
                         });
                     });
                 });
             });
-        }
+        },
 
         /**
-         * Method get a user by ID.
+         * Method get all boards.
+         * @param callback
          */
+        getAllBoards : function(callback) {
+            var sql = "SELECT `name`, `id`, `created_on` FROM `boards`";
+            this.pool.getConnection(function (err, connection) {
+
+                if (err) {
+                    console.log(timestamp() + err);
+                    var response = {
+                        error : "Error connecting to database"
+                    };
+                    callback(response);
+                    return;
+                }
+
+                connection.query(sql, function (err, result) {
+                    if (err || _.isEmpty(result))
+                    {
+                        console.log(timestamp() + "Error getting all boards");
+                        var response = {
+                            error : "Error retrieving all boards"
+                        };
+                        connection.release();
+                        callback(response);
+                        return;
+                    }
+
+                    var response = {
+                        boards : result
+                    };
+                    connection.release();
+                    callback(response);
+                    return;
+                });
+            });
+        },
+
+        /**
+         * Method to get a user by their username from the DB.
+         * @param username
+         * @param token
+         * @param callback
+         */
+        authByUsernameAndToken : function (username, token, callback) {
+
+            if (_.isUndefined(username) || _.isUndefined(token))
+            {
+                console.log(timestamp() + "Username or token was undefined");
+                var response = {
+                    error : "No username or token was sent"
+                };
+                callback(response);
+                return;
+            }
+
+            var sql = "SELECT `token`, `expire_time` FROM `users` WHERE `email` = ?";
+            this.pool.getConnection(function (err, connection) {
+                if (err) {
+                    console.log(timestamp() + err);
+                    callback(false);
+                    return;
+                }
+
+                connection.query(sql, username, function (err, result) {
+                    if (err || _.isEmpty(result) || result.length != 1) {
+                        console.log(timestamp() + err);
+                        connection.release();
+                        callback(false);
+                        return;
+                    }
+
+                    // Compare the provided token and the DB token.
+                    var DB_token = result[0].token;
+                    var expire_time = result[0].expire_time;
+                    if (token != DB_token || moment().isAfter(moment(expire_time)))
+                    {
+                        console.log(timestamp() + "Error: user's token does not match the token in the database" +
+                            " or is expired");
+                        connection.release();
+                        callback(false);
+                        return;
+                    }
+
+                    // User is authenticated.
+                    console.log(timestamp() + "User " + username + " has been authenticated.");
+                    connection.release();
+                    callback(true);
+                });
+            });
+        }
     };
 
     return DBHelper;
