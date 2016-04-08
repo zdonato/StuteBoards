@@ -22,7 +22,7 @@ var jsonParser  = bodyParser.json();
  * Handles POST method to create a board.
  * On success returns JSON with the board name and id.
  */
-router.post("/", jsonParser, cookieParser(), function(req, res){
+router.post("/", jsonParser, cookieParser(), authenticate, function(req, res){
     console.log(timestamp() + "POST request made to /rest/board.");
 
     DB_HELPER.createBoard(req.body.board_name, req.body.created_by, function (response) {
@@ -41,14 +41,14 @@ router.post("/", jsonParser, cookieParser(), function(req, res){
  * Handles GET request to get all boards.
  * On success returns JSON with an array of boards with names and ids.
  */
-router.get("/", jsonParser, cookieParser(), function(req, res) {
+router.get("/", jsonParser, cookieParser(), authenticate, function(req, res) {
     console.log(timestamp() + "GET request made to /rest/board.");
 
     DB_HELPER.getAllBoards(function (response) {
         if (response.error) {
             res.status(403).send(response);
         } else {
-            res.status(200).send(response);
+            res.send(response);
         }
     });
 
