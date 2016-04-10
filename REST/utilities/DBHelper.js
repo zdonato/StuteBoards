@@ -14,16 +14,14 @@ define(function (require) {
     var bcrypt          = require('bcrypt');
     var nodemailer      = require('nodemailer');
     var transporter     = nodemailer.createTransport('smtps://stuteboards%40gmail.com:StuteBoards123@@smtp.gmail.com');
+    var config          = require('../utilities/config.js')
     const saltRounds    = 10;
 
     // Constructor. Call with the database you want to connect to.
     function DBHelper(database) {
-        this.pool = mysql.createPool({
-            host : 'localhost',
-            user : 'root',
-            password : 'root',
+        this.pool = mysql.createPool(_.extend(config, {
             database : database
-        });
+        }));
 
         this.database = database;
     }
