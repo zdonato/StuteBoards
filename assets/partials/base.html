@@ -1,0 +1,9 @@
+<!-- Authorized Base Html -->
+<!-- Contained within the Login Controller, so access is granted -->
+<div ng-Controller="BoardController">
+  <!-- Giant wrapper div -->
+  <form ng-submit="logout()">
+    <button type="submit" id="submit" value="Submit">Logout</button>
+  </form>
+  <ng-include src="boardviewsrc"></ng-include>
+</div>
