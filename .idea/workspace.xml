@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ccf5249d-0396-42c4-a7e2-4c118d0e5378" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/REST/middleware/authenticate.js" afterPath="$PROJECT_DIR$/REST/middleware/authenticate.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/REST/utilities/DBHelper.js" afterPath="$PROJECT_DIR$/REST/utilities/DBHelper.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/javascripts/js.js" afterPath="$PROJECT_DIR$/assets/javascripts/js.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/users.sql" afterPath="$PROJECT_DIR$/users.sql" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/readme.md" afterPath="$PROJECT_DIR$/readme.md" />
     </list>
     <ignored path="StuteBoards.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,12 +40,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="readme.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="readme.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/readme.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="-57">
-                <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <first_editor relative-caret-position="357">
+                <caret line="65" column="30" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -57,7 +53,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="boards.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="boards.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/REST/routes/boards.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="573">
@@ -80,42 +76,12 @@
       <file leaf-file-name="DBHelper.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/REST/utilities/DBHelper.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4347">
-              <caret line="560" column="45" selection-start-line="560" selection-start-column="45" selection-end-line="560" selection-end-column="45" />
+            <state relative-caret-position="-2147">
+              <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
               <folding>
                 <marker date="1460310571617" expanded="true" signature="5289:5603" placeholder="..." />
                 <marker date="1460310571617" expanded="true" signature="5296:5595" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="20" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="js.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/javascripts/js.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="668">
-              <caret line="69" column="53" selection-start-line="69" selection-start-column="53" selection-end-line="69" selection-end-column="53" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="authenticate.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/REST/middleware/authenticate.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -143,12 +109,12 @@
         <option value="$PROJECT_DIR$/REST/middleware.js" />
         <option value="$PROJECT_DIR$/REST/routes/login.js" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/readme.md" />
         <option value="$PROJECT_DIR$/REST/routes/boards.js" />
         <option value="$PROJECT_DIR$/assets/javascripts/js.js" />
         <option value="$PROJECT_DIR$/REST/utilities/DBHelper.js" />
         <option value="$PROJECT_DIR$/REST/middleware/authenticate.js" />
         <option value="$PROJECT_DIR$/users.sql" />
+        <option value="$PROJECT_DIR$/readme.md" />
       </list>
     </option>
   </component>
@@ -394,12 +360,12 @@
       <workItem from="1460306042075" duration="49000" />
       <workItem from="1460306104394" duration="160000" />
       <workItem from="1460308390519" duration="453000" />
-      <workItem from="1460310016553" duration="1468000" />
+      <workItem from="1460310016553" duration="2074000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12150000" />
+    <option name="totallyTimeSpent" value="12756000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
@@ -441,13 +407,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/REST/middleware/authenticate.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -780,54 +739,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/readme.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="-57">
-            <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="0">
-            <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="5" column="9" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="MultiMarkdownFxPreviewEditor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/users.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="20" column="2" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/REST/utilities/DBHelper.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4347">
-          <caret line="560" column="45" selection-start-line="560" selection-start-column="45" selection-end-line="560" selection-end-column="45" />
-          <folding>
-            <marker date="1460310571617" expanded="true" signature="5289:5603" placeholder="..." />
-            <marker date="1460310571617" expanded="true" signature="5296:5595" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/REST/middleware/authenticate.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
@@ -850,6 +761,62 @@
           <caret line="42" column="3" selection-start-line="42" selection-start-column="3" selection-end-line="42" selection-end-column="3" />
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/boards.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/users.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="20" column="2" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/REST/utilities/DBHelper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2147">
+          <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
+          <folding>
+            <marker date="1460310571617" expanded="true" signature="5289:5603" placeholder="..." />
+            <marker date="1460310571617" expanded="true" signature="5296:5595" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/readme.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="357">
+            <caret line="65" column="30" selection-start-line="65" selection-start-column="30" selection-end-line="65" selection-end-column="30" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="5" column="9" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MultiMarkdownFxPreviewEditor">
+        <state />
       </provider>
     </entry>
   </component>

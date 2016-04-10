@@ -58,7 +58,7 @@ ___
 
 ___
 
-### */rest/board* => GET, POST
+### */rest/boards* => GET, POST
 #### Body (POST only)
 ``` 
 {
