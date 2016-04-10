@@ -45,3 +45,6 @@ fabric.properties
 
 # node stuffs
 node_modules/
+
+#config file for DBHelper
+config.js
