@@ -45,15 +45,15 @@ myApp.controller('LoginController', ['$scope', '$http', function($scope, $http)
         submitdata.email = $scope.registrationformdata.email;
         submitdata.password = $scope.registrationformdata.password;
     }
-	$http.post("/rest/registration", submitdata);
+	$http.post("/rest/registration", submitdata)
 	.success(function(data)
 	{
   		redirectTo("CONFIRMATION PATH HERE");
-	}
+	})
 	.error(function(err)
 	{
   		console.log(err);
-	};
+	});
 	//if successful, change logged in to true
 	alert("done with registration");
   };
@@ -67,15 +67,15 @@ myApp.controller('LoginController', ['$scope', '$http', function($scope, $http)
         submitdata.email = $scope.confirmformdata.email;
         submitdata.code = $scope.confirmformdata.code;
     }
-	$http.post("/rest/registration/code", submitdata);
+	$http.post("/rest/registration/code", submitdata)
 	.success(function(data)
 	{
   		redirectTo("LOGIN PAGE TO LOGIN WITH CREDENTIALS");
-	}
+	})
 	.error(function(err)
 	{
   		console.log(err);
-	};
+	});
 	//if successful, change codeduser to true
 	alert("done with confirm");
   };

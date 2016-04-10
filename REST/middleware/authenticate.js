@@ -20,12 +20,12 @@ var jsonParser  = bodyParser.json();
  */
 var authenticate = function(req, res, next)
 {
-    if (!req.cookies || !req.cookies.username || !req.cookies.token)
+    if (!req.cookies || !req.cookies.email || !req.cookies.token)
     {
         console.log(timestamp() + "No user to authenticate");
         res.status(403).send({ error: "You are not authorized to access this page."});
     } else {
-        DB_HELPER.authByUsernameAndToken(req.cookies.username, req.cookies.token, function (response) {
+        DB_HELPER.authByUsernameAndToken(req.cookies.email, req.cookies.token, function (response) {
 
             if (!response){
                 res.status(403).send({ error : "You are not authorized to access this page."});

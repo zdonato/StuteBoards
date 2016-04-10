@@ -21,7 +21,6 @@ define(function (require) {
         this.pool = mysql.createPool({
             host : 'localhost',
             user : 'root',
-            port : 8889,
             password : 'root',
             database : database
         });
@@ -92,8 +91,8 @@ define(function (require) {
                     }
                     console.log(timestamp() + "No user exists for " + email + ", creating now.");
                     // User does not exist. Add them to the DB.
-                    var addUserSql = "INSERT INTO `users` (`email`, `password`, `id`, `confirmation`) " +
-                        "VALUES (?, ?, (SELECT UUID()), ?)";
+                    var addUserSql = "INSERT INTO `users` (`email`, `password`, `confirmation`) " +
+                        "VALUES (?, ?, ?)";
                     var confirmCode = crypto.randomBytes(8).toString('hex');
                     bcrypt.hash(password, saltRounds, function(err, hash) {
                         if (err)
@@ -489,8 +488,8 @@ define(function (require) {
                     }
 
                     // Board does not exist, create it.
-                    var insertSql = "INSERT INTO `boards` (`id`, `name`, `created_by`, `created_on`) " +
-                        "VALUES ( (SELECT UUID()), ?, ?, ?)";
+                    var insertSql = "INSERT INTO `boards` (`name`, `created_by`, `created_on`) " +
+                        "VALUES (?, ?, ?)";
 
                     // Generate created time.
                     var created_on = moment().format();

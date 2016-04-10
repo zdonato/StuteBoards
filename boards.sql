@@ -17,25 +17,22 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `stuteboards_users`
+-- Database: `stuteboards_boards`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `boards`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `boards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` text NOT NULL,
-  `password` text NOT NULL,
-  `confirmation` text NOT NULL,
-  `token` text NOT NULL,
-  `expire_time` text NOT NULL,
-  `is_confirmed` tinyint(11) NOT NULL,
+  `name` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_on` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
