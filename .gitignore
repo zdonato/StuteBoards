@@ -37,6 +37,8 @@
 # JIRA plugin
 atlassian-ide-plugin.xml
 
+.idea/StuteBoards.iml
+
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
