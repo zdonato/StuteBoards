@@ -152,3 +152,57 @@ footer
 	font-size: 1.5em;
 	margin: 20px;
 }
+
+/*Logout Bar for Board Pages*/
+
+#logout-bar
+{
+	background-color: #A9002F;
+	width: 100%;
+	display: inline-block;
+}
+
+#logout-bar span
+{
+	float: right;
+	font-size: 1.5em;
+	color: white;
+	cursor: pointer;
+}
+
+/*Board Creation form*/
+#board-creation
+{
+	text-align: center;
+}
+
+#board-creation input
+{
+	font-size: 1.5em;
+}
+
+#board-creation button
+{
+	font-size: 1.5em;
+	margin: 20px;
+}
+
+/*Board List CSS*/
+#board-list
+{
+	margin-left:auto;
+	margin-right:auto;
+	width: 30%;
+	/*flexbox stuff below*/
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+#board-list div
+{
+	margin: 5px;
+	text-align: center;
+	color: #A9002F;
+	text-decoration: underline;
+}

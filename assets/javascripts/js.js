@@ -2,22 +2,28 @@ var myApp = angular.module('Stuteboards',['ngCookies']);
 
 var userid = "";
 var token = "";
+var email = "";
 
 function softLogin(_$cookies)
 {
+	var res = {email: "", userid: "", token: "", present: false};
+	if (_$cookies.get("email") && _$cookies.get("userid") && _$cookies.get("token"))
+	{
+		res.email = _$cookies.get("email");
+		res.userid = _$cookies.get("userid");
+		res.token = _$cookies.get("token");
+		res.present = true;
+	}
+	return res;
+}
+
+function deleteAllCookiesOnFail(_$cookies)
+{
 	var cookies = _$cookies.getAll();
-	var i = 0;
-	var res = {userid: "", token: "", present: false}
 	angular.forEach(cookies, function (v, k) 
 	{
-		if (i <= 0)
-		{
-			res.userid = k;
-			res.token = _$cookies.get(k);
-			res.present = true;
-		}
+   		_$cookies.remove(k);
 	});
-	return res;
 }
 
 myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) 
@@ -30,8 +36,9 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   		$scope.registered = true;
   		$scope.confirmed = true;
   		var temp = softLogin($cookies);
-  		userid = "userid: " + temp.userid;
-  		token = "token: " + temp.token;
+  		email = temp.email;
+  		userid = temp.userid;
+  		token = temp.token;
   	}
 
   	$scope.loginsrc = "/assets/partials/login.html";
@@ -41,9 +48,11 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   	$scope.registrationformdata = {email:"",password:"",conpassword:""};
   	$scope.confirmformdata = {email:"",code:""};
 
-	$scope.saveCookieData = function(_userid, _token)
+	$scope.saveCookieData = function(_email, _userid, _token)
 	{
-		$cookies.put(_userid,_token);
+		$cookies.put("email",_email);
+		$cookies.put("userid",_userid);
+		$cookies.put("token",_token);
 	}
 
 	$scope.deleteAllCookies = function()
@@ -70,9 +79,11 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   			$scope.registered = true;
   			$scope.confirmed = true;
   			$scope.deleteAllCookies();
-  			$scope.saveCookieData(data.id, data.token);
+  			$scope.saveCookieData(submitdata.email, data.id, data.token);
+  			email = submitdata.email;
   			userid = data.id;
   			token = data.token;
+  			location.reload();
 		})
 		.error(function(err)
 		{
@@ -116,8 +127,6 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
 		.success(function(data)
 		{
 			var submitdatatemp = {email:"",password:""};
-			console.log($scope.registrationformdata.email);
-			console.log($scope.registrationformdata.password);
 			if ($scope.registrationformdata.email && $scope.registrationformdata.password) 
   			{
         		submitdatatemp.email = $scope.registrationformdata.email;
@@ -129,9 +138,11 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   				$scope.registered = true;
   				$scope.confirmed = true;
   				$scope.deleteAllCookies();
-  				$scope.saveCookieData(data.id, data.token);
+  				$scope.saveCookieData(submitdatatemp.email, data.id, data.token);
+  				email = submitdatatemp.email;
   				userid = data.id;
   				token = data.token;
+  				location.reload();
 			})
 			.error(function(err)
 			{
@@ -148,17 +159,64 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   	{
 		$scope.deleteAllCookies();
 		location.reload();
-		console.log("done");
   	};
 }]);
 
 myApp.controller('BoardController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) 
 {
   	$scope.authorizedsrc = "/assets/partials/base.html";
+  	$scope.boardlistsrc = "/assets/partials/boardlist.html";
   	$scope.boardviewsrc = "/assets/partials/boardview.html";
+  	$scope.topnavviewsrc = "/assets/partials/topnavview.html";
+  	$scope.bottomnavviewsrc = "/assets/partials/bottomnavview.html";
+
+  	$scope.createboarddata = {name: ""}
+
+  	$scope.boardlist = {data: []};
+
+  	//Create a new board
+  	$scope.verifyAndCreateBoard = function() 
+  	{
+  		var submitdata = {board_name:"", created_by:""};
+  		if ($scope.createboarddata.name && userid) 
+  		{
+        	submitdata.board_name = $scope.createboarddata.name;
+        	submitdata.created_by = userid;
+    	}
+		$http.post("/rest/boards", submitdata)
+		.success(function(data)
+		{
+  			location.reload();
+		})
+		.error(function(err)
+		{
+  			deleteAllCookiesOnFail();
+  			location.reload();
+		});
+  	};
+
+  	$scope.buildBoardListData = function()
+  	{
+  		configobj = {data:null};
+  		configobj.data = {email: email, token: token};
+  		$http.get("/rest/boards", configobj)
+		.success(function(data)
+		{
+  			$scope.boardlist.data = data.boards;
+		})
+		.error(function(err)
+		{
+  			// deleteAllCookiesOnFail($cookies);
+  			// location.reload();
+		});
+  	}
+
+  	$scope.buildBoardListData();
 }]);
 
 $(document).ready(function()
 {
-  
+	console.log(email);
+  	console.log(userid);
+  	console.log(token);
 });
