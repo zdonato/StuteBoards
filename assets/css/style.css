@@ -12,12 +12,6 @@ body
 	background: -webkit-linear-gradient(lightgray, gray);
 }
 
-.anon
-{
-	color: green;
-	font-weight: bolder;
-}
-
 hr
 {
 	border: none;
@@ -47,10 +41,11 @@ nav a:visited
     color: #A9002F;
 }
 
-header h1,h2
+.btn-stevens
 {
-	text-align: center;
-	color: #A9002F;
+	color: #fff;
+    background-color: #A9002F;
+    border-color: #520017;
 }
 
 #new-thread-submit
@@ -136,21 +131,57 @@ footer
 	text-align: center;
 }
 
-/*Login page now*/
-#login-section
+.login-section hr
 {
-	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
-#login-section input
+.login-section .row hr
 {
-	font-size: 1.5em;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-#login-section button
+.login-section header h1,h2
+{
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+.login-section label
 {
 	font-size: 1.5em;
-	margin: 20px;
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+.login-section label.error
+{
+	font-size: 1em;
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+.login-section div.has-success input
+{
+	background-color: lightgreen;
+}
+
+.login-section div.has-error input
+{
+	background-color: #ff8080;
+}
+
+
+.login-section .btn
+{
+	font-size: 1.75em;
+	margin: 0 auto;
+	display: table;
 }
 
 /*Logout Bar for Board Pages*/

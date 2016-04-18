@@ -64,8 +64,22 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
 		});
 	}
 
+	$scope.validate = function(_formid)
+	{
+		$('#'+_formid).validate({ // initialize the plugin
+        	highlight: function(element) 
+        	{
+    			$(element).parent().addClass("has-error").removeClass("has-success");
+  			},
+  			unhighlight: function(element) 
+  			{
+    			$(element).parent().removeClass("has-error").addClass("has-success");
+  			}
+    	});
+	}
+
   	// Login into Acount
-  	$scope.verifyAndLogin = function() 
+  	$scope.verifyAndLogin = function(_formid) 
   	{
   		var submitdata = {email:"", password:""};
   		if ($scope.loginformdata.email && $scope.loginformdata.password) 
@@ -92,7 +106,7 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   	};
 
   	// Register New Account
-  	$scope.verifyAndRegister = function() 
+  	$scope.verifyAndRegister = function(_formid) 
   	{
   		var submitdata = {email:"", password:""};
   		if ($scope.registrationformdata.email 
@@ -115,7 +129,7 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   	};
 
   	//Confirm New Account
-  	$scope.verifyAndConfirm = function() 
+  	$scope.verifyAndConfirm = function(_formid) 
   	{
   		var submitdata = {email:"",code:""};
   		if ($scope.confirmformdata.email && $scope.confirmformdata.code) 
@@ -123,6 +137,7 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
         	submitdata.email = $scope.confirmformdata.email;
         	submitdata.code = $scope.confirmformdata.code;
     	}
+    	$scope.validate(_formid);
 		$http.post("/rest/registration/code", submitdata)
 		.success(function(data)
 		{
@@ -199,16 +214,19 @@ myApp.controller('BoardController', ['$scope', '$http', '$cookies', function($sc
   	{
   		configobj = {data:null};
   		configobj.data = {email: email, token: token};
-  		$http.get("/rest/boards", configobj)
-		.success(function(data)
-		{
-  			$scope.boardlist.data = data.boards;
-		})
-		.error(function(err)
-		{
-  			// deleteAllCookiesOnFail($cookies);
-  			// location.reload();
-		});
+  		if(!(email == "" || token == ""))
+  		{
+  			$http.get("/rest/boards", configobj)
+			.success(function(data)
+			{
+  				$scope.boardlist.data = data.boards;
+			})
+			.error(function(err)
+			{
+  				// deleteAllCookiesOnFail($cookies);
+  				// location.reload();
+			});
+  		}
   	}
 
   	$scope.buildBoardListData();
@@ -219,4 +237,8 @@ $(document).ready(function()
 	console.log(email);
   	console.log(userid);
   	console.log(token);
+
+
+  	//change this to generic function later
+
 });
