@@ -184,16 +184,15 @@ footer
 	display: table;
 }
 
-/*Logout Bar for Board Pages*/
-
-#logout-bar
+/*Logout/Menu Bar for Board Pages*/
+#menu-bar
 {
 	background-color: #A9002F;
 	width: 100%;
 	display: inline-block;
 }
 
-#logout-bar span
+#menu-bar span
 {
 	float: right;
 	font-size: 1.5em;
@@ -201,21 +200,39 @@ footer
 	cursor: pointer;
 }
 
-/*Board Creation form*/
-#board-creation
-{
-	text-align: center;
-}
+/*Board Creation Form*/
 
-#board-creation input
+#board-create-section label
 {
 	font-size: 1.5em;
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
 }
 
-#board-creation button
+#board-create-section label.error
 {
-	font-size: 1.5em;
-	margin: 20px;
+	font-size: 1em;
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+#board-create-section div.has-success input
+{
+	background-color: lightgreen;
+}
+
+#board-create-section div.has-error input
+{
+	background-color: #ff8080;
+}
+
+#board-create-section .btn
+{
+	font-size: 1.75em;
+	margin: 0 auto;
+	display: table;
 }
 
 /*Board List CSS*/

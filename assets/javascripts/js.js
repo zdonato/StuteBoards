@@ -28,55 +28,52 @@ function deleteAllCookiesOnFail(_$cookies)
 
 myApp.config(function($routeProvider, $locationProvider) {
 	$routeProvider
-		.when('/', 
+		.when('/boards', 
 		{
-    		templateUrl: 'index.html',
-    		controller: 'LoginController',
+    		templateUrl: 'assets/partials/base.html',
+    		controller: 'BoardController'
   		})
-		.when('#/boards', 
+  		.when('/login', 
 		{
-    		templateUrl: '../assets/partials/base.html',
-    		controller: 'BoardController',
+    		templateUrl: 'assets/partials/login.html',
+    		controller: 'LoginController'
   		})
-  		.when('#/login', 
+  		.when('/confirmation', 
 		{
-    		templateUrl: '../assets/partials/login.html',
-    		controller: 'LoginController',
+    		templateUrl: 'assets/partials/confirmation.html',
+    		controller: 'LoginController'
   		})
-  		.when('#/confirmation', 
-		{
-    		templateUrl: '../assets/partials/confirmation.html',
-    		controller: 'LoginController',
-  		});
+  		.otherwise({redirectTo: '/login'});
 	});
 
-myApp.controller('LoginController', ['$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($scope, $http, $cookies, $location, $route, $routeParams) 
+myApp.controller('MainController', ['$window','$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($window, $scope, $http, $cookies, $location, $route, $routeParams) 
 {
+	//Main Controller handles soft logins
 	console.log($routeParams);
-  	$scope.registered = false;
-  	$scope.confirmed = false;
   	//do login validation here, change variables if necessary
   	if (softLogin($cookies).present == true)
   	{
-  		$scope.registered = true;
-  		$scope.confirmed = true;
   		var temp = softLogin($cookies);
   		email = temp.email;
   		userid = temp.userid;
   		token = temp.token;
-  		window.location.replace("#/boards");
+  		//use route params to indicate which board
+  		$window.location.href = "#/boards";
   	}
   	else
   	{
-  		window.location.replace("#/login");	
+  		$window.location.href = "#/login";
   	}
+}]);
 
+myApp.controller('LoginController', ['$window','$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($window, $scope, $http, $cookies, $location, $route, $routeParams) 
+{
   	$scope.loginsrc = "/assets/partials/login.html";
   	$scope.confirmationsrc = "/assets/partials/confirmation.html";
   	$scope.authorizedsrc = "/assets/partials/base.html";
   	$scope.loginformdata = {email:"",password:""};
   	$scope.registrationformdata = {email:"",password:"",conpassword:""};
-  	$scope.confirmformdata = {email:"",code:""};
+  	$scope.confirmformdata = {email:"",code:"",password:""};
 
 	$scope.saveCookieData = function(_email, _userid, _token)
 	{
@@ -120,14 +117,13 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', '$location',
 		$http.post("/rest/login", submitdata)
 		.success(function(data)
 		{
-  			$scope.registered = true;
-  			$scope.confirmed = true;
   			$scope.deleteAllCookies();
   			$scope.saveCookieData(submitdata.email, data.id, data.token);
   			email = submitdata.email;
   			userid = data.id;
   			token = data.token;
-  			window.location.replace("#/boards");
+  			//window.location.replace("#/boards");
+  			$window.location.href = "#/boards";
 		})
 		.error(function(err)
 		{
@@ -150,7 +146,7 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', '$location',
 		$http.post("/rest/registration", submitdata)
 		.success(function(data)
 		{
-  			$scope.registered = true;
+  			$window.location.href = "#/confirmation";
 		})
 		.error(function(err)
 		{
@@ -159,7 +155,7 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', '$location',
   	};
 
   	//Confirm New Account
-  	$scope.verifyAndConfirm = function(_formid) 
+  	$scope.verifyAndConfirm = function() 
   	{
   		var submitdata = {email:"",code:""};
   		if ($scope.confirmformdata.email && $scope.confirmformdata.code) 
@@ -167,27 +163,27 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', '$location',
         	submitdata.email = $scope.confirmformdata.email;
         	submitdata.code = $scope.confirmformdata.code;
     	}
-    	$scope.validate(_formid);
+    	//$scope.validate(_formid);
 		$http.post("/rest/registration/code", submitdata)
 		.success(function(data)
 		{
 			var submitdatatemp = {email:"",password:""};
-			if ($scope.registrationformdata.email && $scope.registrationformdata.password) 
+			if ($scope.confirmformdata.email && $scope.confirmformdata.password) 
   			{
-        		submitdatatemp.email = $scope.registrationformdata.email;
-        		submitdatatemp.password = $scope.registrationformdata.password;
+        		submitdatatemp.email = $scope.confirmformdata.email;
+        		submitdatatemp.password = $scope.confirmformdata.password;
     		}
   			$http.post("/rest/login", submitdatatemp)
 			.success(function(data)
 			{
-  				$scope.registered = true;
-  				$scope.confirmed = true;
   				$scope.deleteAllCookies();
   				$scope.saveCookieData(submitdatatemp.email, data.id, data.token);
   				email = submitdatatemp.email;
   				userid = data.id;
   				token = data.token;
-  				window.location.replace("#/boards");
+  				console.log("HEREEE");
+  				$window.location.href = "#/boards";
+  				//window.location.replace("#/boards");
   				//location.reload();
 			})
 			.error(function(err)
@@ -203,8 +199,9 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', '$location',
 
   	$scope.logout = function() 
   	{
+  		console.log("logout");
 		$scope.deleteAllCookies();
-		location.reload();
+		$window.location.href = "/";
   	};
 }]);
 
@@ -259,10 +256,6 @@ myApp.controller('BoardController', ['$scope', '$http', '$cookies', function($sc
 			});
   		}
   	}
-
-
-
-  	//$scope.buildBoardListData();
 }]);
 
 $(document).ready(function()

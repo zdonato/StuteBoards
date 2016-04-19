@@ -1,4 +1,4 @@
-<section id="board-list">
+<section ng-init="buildBoardListData()" id="board-list">
   <div ng-repeat="board in boardlist.data">
     <span>{{board.name}}</span>
   </div>

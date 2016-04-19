@@ -22,9 +22,11 @@
     <title>Stuteboards</title>
   </head>
   <body ng-app="Stuteboards">
+    <div ng-controller="MainController">
         <div ng-controller="LoginController">
+        <div ng-view></div>
 
-          <div ng-show="(!registered && !confirmed)">
+          <!-- <div ng-show="(!registered && !confirmed)">
             <ng-include src="loginsrc"></ng-include>
           </div>
 
@@ -34,8 +36,9 @@
 
           <div ng-show="(registered && confirmed)">
             <ng-include src="authorizedsrc"></ng-include>
-          </div>
+          </div> -->
 
         </div>
+      </div>
   </body>
 </html>

@@ -1,20 +1,27 @@
 <!-- Authorized Base Html -->
-<!-- Contained within the Login Controller, so access is granted -->
-<div ng-Controller="BoardController">
-  <!-- Giant wrapper div -->
   
-  <section id="logout-bar">
-    <span ng-click="logout()">Logout</span>
-  </section>
+<section ng-controller="LoginController" id="menu-bar">
+  <span ng-click="logout()">Logout</span>
+</section>
   
+  <!-- Will be under BoardController -->
   <!-- Create Board Button and Form here above boards -->
-  <section id="board-creation">
-    <form ng-submit="verifyAndCreateBoard()">
-      <h2>Board Name</h2><br>
-      <input required type="text" name="name" ng-model="createboarddata.name"><br>
-      <button type="submit" id="submit" value="Submit">Create Board</button>
-    </form>
-  </section>
-  <div ng-init="buildBoardListData()"></div>
-  <ng-include src="boardlistsrc"></ng-include>
+<div class="container">
+  <div class="row" id="board-create-section">
+    <div class = "col-xs-1 col-md-4"></div>
+    <div class = "col-xs-10 col-md-4">
+      <form id="boardcreateform" ng-submit="verifyAndCreateBoard()">
+        <div class="form-group">
+          <label for="boardname">Board Name</label>
+          <input required type="text" name="name" class="form-control" id="boardname" ng-model="createboarddata.name" ng-change="validate('boardcreateform')" placeholder="pics">
+        </div>
+        <button type="submit" class="btn btn-stevens">Submit</button>
+      </form>
+    </div>
+    <div class = "col-xs-1 col-md-4"></div>
+    
+    <div class="row">
+    </div>
+    <ng-include src="boardlistsrc"></ng-include>
+  </div>
 </div>
