@@ -1,4 +1,4 @@
-var myApp = angular.module('Stuteboards',['ngCookies']);
+var myApp = angular.module('Stuteboards',['ngCookies', 'ngRoute']);
 
 var userid = "";
 var token = "";
@@ -26,8 +26,33 @@ function deleteAllCookiesOnFail(_$cookies)
 	});
 }
 
-myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) 
+myApp.config(function($routeProvider, $locationProvider) {
+	$routeProvider
+		.when('/', 
+		{
+    		templateUrl: 'index.html',
+    		controller: 'LoginController',
+  		})
+		.when('#/boards', 
+		{
+    		templateUrl: '../assets/partials/base.html',
+    		controller: 'BoardController',
+  		})
+  		.when('#/login', 
+		{
+    		templateUrl: '../assets/partials/login.html',
+    		controller: 'LoginController',
+  		})
+  		.when('#/confirmation', 
+		{
+    		templateUrl: '../assets/partials/confirmation.html',
+    		controller: 'LoginController',
+  		});
+	});
+
+myApp.controller('LoginController', ['$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($scope, $http, $cookies, $location, $route, $routeParams) 
 {
+	console.log($routeParams);
   	$scope.registered = false;
   	$scope.confirmed = false;
   	//do login validation here, change variables if necessary
@@ -39,6 +64,11 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   		email = temp.email;
   		userid = temp.userid;
   		token = temp.token;
+  		window.location.replace("#/boards");
+  	}
+  	else
+  	{
+  		window.location.replace("#/login");	
   	}
 
   	$scope.loginsrc = "/assets/partials/login.html";
@@ -97,7 +127,7 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   			email = submitdata.email;
   			userid = data.id;
   			token = data.token;
-  			location.reload();
+  			window.location.replace("#/boards");
 		})
 		.error(function(err)
 		{
@@ -157,7 +187,8 @@ myApp.controller('LoginController', ['$scope', '$http', '$cookies', function($sc
   				email = submitdatatemp.email;
   				userid = data.id;
   				token = data.token;
-  				location.reload();
+  				window.location.replace("#/boards");
+  				//location.reload();
 			})
 			.error(function(err)
 			{
@@ -229,7 +260,9 @@ myApp.controller('BoardController', ['$scope', '$http', '$cookies', function($sc
   		}
   	}
 
-  	$scope.buildBoardListData();
+
+
+  	//$scope.buildBoardListData();
 }]);
 
 $(document).ready(function()
@@ -237,8 +270,4 @@ $(document).ready(function()
 	console.log(email);
   	console.log(userid);
   	console.log(token);
-
-
-  	//change this to generic function later
-
 });
