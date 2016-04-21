@@ -1,27 +1,17 @@
 <!-- Authorized Base Html -->
   
 <section ng-controller="LoginController" id="menu-bar">
+  <!-- ng-repeat to go here with the entire board route up to this page -->
   <span ng-click="logout()">Logout</span>
 </section>
   
   <!-- Will be under BoardController -->
   <!-- Create Board Button and Form here above boards -->
 <div class="container">
-  <div class="row" id="board-create-section">
-    <div class = "col-xs-1 col-md-4"></div>
-    <div class = "col-xs-10 col-md-4">
-      <form id="boardcreateform" ng-submit="verifyAndCreateBoard()">
-        <div class="form-group">
-          <label for="boardname">Board Name</label>
-          <input required type="text" name="name" class="form-control" id="boardname" ng-model="createboarddata.name" ng-change="validate('boardcreateform')" placeholder="pics">
-        </div>
-        <button type="submit" class="btn btn-stevens">Submit</button>
-      </form>
-    </div>
-    <div class = "col-xs-1 col-md-4"></div>
-    
-    <div class="row">
-    </div>
+  <div ng-show="showboardlist">
     <ng-include src="boardlistsrc"></ng-include>
+  </div>
+  <div ng-show="!showboardlist">
+    <ng-include src="boardviewsrc"></ng-include>
   </div>
 </div>

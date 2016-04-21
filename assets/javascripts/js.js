@@ -28,6 +28,11 @@ function deleteAllCookiesOnFail(_$cookies)
 
 myApp.config(function($routeProvider, $locationProvider) {
 	$routeProvider
+		.when('/boards/:boardid', 
+		{
+    		templateUrl: 'assets/partials/base.html',
+    		controller: 'BoardController'
+  		})
 		.when('/boards', 
 		{
     		templateUrl: 'assets/partials/base.html',
@@ -49,7 +54,9 @@ myApp.config(function($routeProvider, $locationProvider) {
 myApp.controller('MainController', ['$window','$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($window, $scope, $http, $cookies, $location, $route, $routeParams) 
 {
 	//Main Controller handles soft logins
-	console.log($routeParams);
+	$scope.$route = $route;
+    $scope.$location = $location;
+    $scope.$routeParams = $routeParams;
   	//do login validation here, change variables if necessary
   	if (softLogin($cookies).present == true)
   	{
@@ -58,7 +65,7 @@ myApp.controller('MainController', ['$window','$scope', '$http', '$cookies', '$l
   		userid = temp.userid;
   		token = temp.token;
   		//use route params to indicate which board
-  		$window.location.href = "#/boards";
+  		//$window.location.href = "#/boards";
   	}
   	else
   	{
@@ -68,6 +75,8 @@ myApp.controller('MainController', ['$window','$scope', '$http', '$cookies', '$l
 
 myApp.controller('LoginController', ['$window','$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($window, $scope, $http, $cookies, $location, $route, $routeParams) 
 {
+	$scope.params = $routeParams;
+
   	$scope.loginsrc = "/assets/partials/login.html";
   	$scope.confirmationsrc = "/assets/partials/confirmation.html";
   	$scope.authorizedsrc = "/assets/partials/base.html";
@@ -184,7 +193,6 @@ myApp.controller('LoginController', ['$window','$scope', '$http', '$cookies', '$
   				console.log("HEREEE");
   				$window.location.href = "#/boards";
   				//window.location.replace("#/boards");
-  				//location.reload();
 			})
 			.error(function(err)
 			{
@@ -205,8 +213,26 @@ myApp.controller('LoginController', ['$window','$scope', '$http', '$cookies', '$
   	};
 }]);
 
-myApp.controller('BoardController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) 
+function compareBoardName(a,b) {
+  if (a.name < b.name)
+    return -1;
+  else if (a.name > b.name)
+    return 1;
+  else 
+    return 0;
+}
+
+myApp.controller('BoardController', ['$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($scope, $http, $cookies, $location, $route, $routeParams) 
 {
+	$scope.params = $routeParams;
+
+	$scope.showboardlist = true;
+
+	if($scope.params.boardid != null)
+	{
+		$scope.showboardlist = false;	
+	}
+
   	$scope.authorizedsrc = "/assets/partials/base.html";
   	$scope.boardlistsrc = "/assets/partials/boardlist.html";
   	$scope.boardviewsrc = "/assets/partials/boardview.html";
@@ -229,14 +255,28 @@ myApp.controller('BoardController', ['$scope', '$http', '$cookies', function($sc
 		$http.post("/rest/boards", submitdata)
 		.success(function(data)
 		{
-  			location.reload();
+  			$route.reload();
 		})
 		.error(function(err)
 		{
-  			deleteAllCookiesOnFail();
-  			location.reload();
+  			deleteAllCookiesOnFail($cookies);
+  			$route.reload();
 		});
   	};
+
+  	$scope.validate = function(_formid)
+	{
+		$('#'+_formid).validate({ // initialize the plugin
+        	highlight: function(element) 
+        	{
+    			$(element).parent().addClass("has-error").removeClass("has-success");
+  			},
+  			unhighlight: function(element) 
+  			{
+    			$(element).parent().removeClass("has-error").addClass("has-success");
+  			}
+    	});
+	}
 
   	$scope.buildBoardListData = function()
   	{
@@ -248,11 +288,12 @@ myApp.controller('BoardController', ['$scope', '$http', '$cookies', function($sc
 			.success(function(data)
 			{
   				$scope.boardlist.data = data.boards;
+  				$scope.boardlist.data.sort(compareBoardName);
 			})
 			.error(function(err)
 			{
   				// deleteAllCookiesOnFail($cookies);
-  				// location.reload();
+  				// $route.reload();
 			});
   		}
   	}

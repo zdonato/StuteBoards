@@ -1,5 +1,34 @@
-<section ng-init="buildBoardListData()" id="board-list">
-  <div ng-repeat="board in boardlist.data">
-    <span>{{board.name}}</span>
+<div class="row">
+  <div class = "col-xs-1 col-md-4"></div>
+  <div class="col-xs-10 col-md-4">
+    <h1 style="color: #A9002F;margin: 0 auto;display: table;">Board List</h1>
   </div>
-</section>
+  <div class = "col-xs-1 col-md-4"></div>
+</div>
+
+<div class="row">
+  <div class = "col-xs-1 col-md-4"></div>
+  <div ng-init="buildBoardListData()" class="col-xs-10 col-md-4" id="board-list">
+    <div ng-repeat="board in boardlist.data">
+      <span><a ng-href="#boards/{{board.id}}">{{board.name}}</a></span>
+    </div>
+  </div>
+  <div class = "col-xs-1 col-md-4"></div>
+</div>
+
+<hr style="margin-top: 10px;margin-bottom: 10px;">
+
+<div class="row" id="board-create-section">
+  <div class = "col-xs-1 col-md-4"></div>
+  <div class = "col-xs-10 col-md-4">
+    <h2>Create Board</h2>
+    <form id="boardcreateform" ng-submit="verifyAndCreateBoard()">
+      <div class="form-group">
+        <input required type="text" name="name" class="form-control" id="boardname" ng-model="createboarddata.name" ng-change="validate('boardcreateform')" placeholder="pics">
+      </div>
+      <button type="submit" class="btn btn-stevens">Create</button>
+    </form>
+  </div>
+    
+  <div class = "col-xs-1 col-md-4"></div>
+</div>
