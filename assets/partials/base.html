@@ -8,10 +8,16 @@
   <!-- Will be under BoardController -->
   <!-- Create Board Button and Form here above boards -->
 <div class="container">
-  <div ng-show="showboardlist">
+  <!-- boardlist vs boardview -->
+  <div ng-show="(showboardlist && !showthreadview)">
     <ng-include src="boardlistsrc"></ng-include>
   </div>
-  <div ng-show="!showboardlist">
+  <div ng-show="(!showboardlist && !showthreadview)">
     <ng-include src="boardviewsrc"></ng-include>
+  </div>
+
+  <!-- Thread view below -->
+  <div ng-show="showthreadview">
+    <ng-include src="threadviewsrc"></ng-include>
   </div>
 </div>

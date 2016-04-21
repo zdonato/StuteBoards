@@ -28,8 +28,19 @@ function deleteAllCookiesOnFail(_$cookies)
 
 myApp.config(function($routeProvider, $locationProvider) {
 	$routeProvider
+		.when('/boards/:boardid/:page/:threadid', 
+		{
+    		templateUrl: 'assets/partials/base.html',
+    		controller: 'BoardController'
+  		})
+		.when('/boards/:boardid/:page', 
+		{
+    		templateUrl: 'assets/partials/base.html',
+    		controller: 'BoardController'
+  		})
 		.when('/boards/:boardid', 
 		{
+			//just default to page onew
     		templateUrl: 'assets/partials/base.html',
     		controller: 'BoardController'
   		})
@@ -48,7 +59,7 @@ myApp.config(function($routeProvider, $locationProvider) {
     		templateUrl: 'assets/partials/confirmation.html',
     		controller: 'LoginController'
   		})
-  		.otherwise({redirectTo: '/login'});
+  		.otherwise({redirectTo: '/boards'});
 	});
 
 myApp.controller('MainController', ['$window','$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($window, $scope, $http, $cookies, $location, $route, $routeParams) 
@@ -65,7 +76,6 @@ myApp.controller('MainController', ['$window','$scope', '$http', '$cookies', '$l
   		userid = temp.userid;
   		token = temp.token;
   		//use route params to indicate which board
-  		//$window.location.href = "#/boards";
   	}
   	else
   	{
@@ -190,7 +200,6 @@ myApp.controller('LoginController', ['$window','$scope', '$http', '$cookies', '$
   				email = submitdatatemp.email;
   				userid = data.id;
   				token = data.token;
-  				console.log("HEREEE");
   				$window.location.href = "#/boards";
   				//window.location.replace("#/boards");
 			})
@@ -222,20 +231,46 @@ function compareBoardName(a,b) {
     return 0;
 }
 
-myApp.controller('BoardController', ['$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($scope, $http, $cookies, $location, $route, $routeParams) 
+myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($window, $scope, $http, $cookies, $location, $route, $routeParams) 
 {
 	$scope.params = $routeParams;
 
 	$scope.showboardlist = true;
+	$scope.showthreadview = false;
+
+	$scope.boardid = 1;
+	$scope.pagenumber = 1;
+	$scope.threadid = 1;
 
 	if($scope.params.boardid != null)
 	{
-		$scope.showboardlist = false;	
+		//viewing a board
+		$scope.showboardlist = false;
+		$scope.boardid = $scope.params.boardid;
+		if($scope.params.page != null)
+		{
+			//get page number that is not an assumed 1
+			$scope.pagenumber = $scope.params.page;
+			console.log($scope.params.threadid);
+			if ($scope.params.threadid != null)
+			{
+				//We are viewing an individual thread
+				$scope.threadid = $scope.params.threadid;
+				$scope.showthreadview = true;
+			}
+		}
+		else
+		{
+			//add 1 to the url if it an assumed 1 
+			//(user put in /#/boards/boardid, so make it /#/boards/boardid/1)
+			$window.location.href = "#/boards/" + $scope.boardid + "/" + $scope.pagenumber;
+		}
 	}
 
   	$scope.authorizedsrc = "/assets/partials/base.html";
   	$scope.boardlistsrc = "/assets/partials/boardlist.html";
   	$scope.boardviewsrc = "/assets/partials/boardview.html";
+  	$scope.threadviewsrc = "/assets/partials/threadview.html";
   	$scope.topnavviewsrc = "/assets/partials/topnavview.html";
   	$scope.bottomnavviewsrc = "/assets/partials/bottomnavview.html";
 
