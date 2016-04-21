@@ -12,12 +12,6 @@ body
 	background: -webkit-linear-gradient(lightgray, gray);
 }
 
-.anon
-{
-	color: green;
-	font-weight: bolder;
-}
-
 hr
 {
 	border: none;
@@ -47,10 +41,11 @@ nav a:visited
     color: #A9002F;
 }
 
-header h1,h2
+.btn-stevens
 {
-	text-align: center;
-	color: #A9002F;
+	color: #fff;
+    background-color: #A9002F;
+    border-color: #520017;
 }
 
 #new-thread-submit
@@ -136,33 +131,68 @@ footer
 	text-align: center;
 }
 
-/*Login page now*/
-#login-section
+.login-section hr
 {
-	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
-#login-section input
+.login-section .row hr
+{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.login-section header h1,h2
+{
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+.login-section label
 {
 	font-size: 1.5em;
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
 }
 
-#login-section button
+.login-section label.error
 {
-	font-size: 1.5em;
-	margin: 20px;
+	font-size: 1em;
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
 }
 
-/*Logout Bar for Board Pages*/
+.login-section div.has-success input
+{
+	background-color: lightgreen;
+}
 
-#logout-bar
+.login-section div.has-error input
+{
+	background-color: #ff8080;
+}
+
+
+.login-section .btn
+{
+	font-size: 1.75em;
+	margin: 0 auto;
+	display: table;
+}
+
+/*Logout/Menu Bar for Board Pages*/
+#menu-bar
 {
 	background-color: #A9002F;
 	width: 100%;
 	display: inline-block;
 }
 
-#logout-bar span
+#menu-bar span
 {
 	float: right;
 	font-size: 1.5em;
@@ -170,29 +200,56 @@ footer
 	cursor: pointer;
 }
 
-/*Board Creation form*/
-#board-creation
-{
-	text-align: center;
-}
+/*Board Creation Form*/
 
-#board-creation input
+#board-create-section label
 {
 	font-size: 1.5em;
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
 }
 
-#board-creation button
+#board-create-section label.error
 {
-	font-size: 1.5em;
-	margin: 20px;
+	font-size: 1em;
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+#board-create-section div.has-success input
+{
+	background-color: lightgreen;
+}
+
+#board-create-section div.has-error input
+{
+	background-color: #ff8080;
+}
+
+#board-create-section .btn
+{
+	font-size: 1.75em;
+	margin: 0 auto;
+	display: table;
+}
+
+#board-create-section h2
+{
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+#board-create-section input
+{
+	font-size: 1.25em;
 }
 
 /*Board List CSS*/
 #board-list
 {
-	margin-left:auto;
-	margin-right:auto;
-	width: 30%;
 	/*flexbox stuff below*/
 	display: flex;
 	flex-wrap: wrap;
@@ -206,3 +263,4 @@ footer
 	color: #A9002F;
 	text-decoration: underline;
 }
+

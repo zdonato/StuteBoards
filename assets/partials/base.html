@@ -1,20 +1,17 @@
 <!-- Authorized Base Html -->
-<!-- Contained within the Login Controller, so access is granted -->
-<div ng-Controller="BoardController">
-  <!-- Giant wrapper div -->
   
-  <section id="logout-bar">
-    <span ng-click="logout()">Logout</span>
-  </section>
+<section ng-controller="LoginController" id="menu-bar">
+  <!-- ng-repeat to go here with the entire board route up to this page -->
+  <span ng-click="logout()">Logout</span>
+</section>
   
+  <!-- Will be under BoardController -->
   <!-- Create Board Button and Form here above boards -->
-  <section id="board-creation">
-    <form ng-submit="verifyAndCreateBoard()">
-      <h2>Board Name</h2><br>
-      <input required type="text" name="name" ng-model="createboarddata.name"><br>
-      <button type="submit" id="submit" value="Submit">Create Board</button>
-    </form>
-  </section>
-  
-  <ng-include src="boardlistsrc"></ng-include>
+<div class="container">
+  <div ng-show="showboardlist">
+    <ng-include src="boardlistsrc"></ng-include>
+  </div>
+  <div ng-show="!showboardlist">
+    <ng-include src="boardviewsrc"></ng-include>
+  </div>
 </div>

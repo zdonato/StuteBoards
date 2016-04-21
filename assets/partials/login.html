@@ -1,36 +1,55 @@
 <!-- Will be under the LoginController angularjs Controller -->
-<header>
-  <h1>Register</h1>
-</header>
+<div class="container login-section">
+  <div class="row">
+    <header class="col-xs-12">
+      <h1>Login or Register</h1>
+    </header>
+  </div>
 
-<hr>
+  <hr>
 
-<section id="login-section">
-  <form ng-submit="verifyAndRegister()">
-    <h2>Email to Login With</h2><br>
-    <input required type="email" name="email" ng-model="registrationformdata.email"><br>
-    <h2>Password</h2><br>
-    <input required type="password" name="password" ng-model="registrationformdata.password"><br>
-    <h2>Confirm Password</h2><br>
-    <input required type="password" name="password" ng-model="registrationformdata.conpassword"><br>
-    <button type="submit" id="submit" value="Submit">Register!</button>
-  </form>
-</section>
+  <div class="row">
+    <div class="hidden-xs col-md-2"></div>
+    <div class="col-xs-12 col-md-4">
+      <header>
+        <h2>Login</h2>
+      </header>
+      <hr>
+      <form id="loginform" ng-submit="verifyAndLogin()">
+        <div class="form-group">
+          <label for="loginemail">Email</label>
+          <input required type="email" name="email" class="form-control" id="loginemail" ng-model="loginformdata.email" ng-change="validate('loginform')" placeholder="@stevens.edu Email">
+        </div>
+        <div class="form-group">
+          <label for="loginpassword">Password</label>
+          <input required type="password" name="password" class="form-control" id="loginpassword" ng-model="loginformdata.password" ng-change="validate('loginform')" placeholder="Dimitrios347">
+        </div>
+        <button type="submit" class="btn btn-stevens">Submit</button>
+      </form>
+    </div>
 
-<hr>
+    <div class="col-xs-12 col-md-4">
+      <header>
+        <h2>Register</h2>
+      </header>
+      <hr>
+      <form id="registrationform" ng-submit="verifyAndRegister()">
+        <div class="form-group">
+          <label for="registeremail">Email</label>
+          <input required type="email" name="email" class="form-control" id="registeremail" ng-model="registrationformdata.email" ng-change="validate('registrationform')" placeholder="@stevens.edu Email">
+        </div>
+        <div class="form-group">
+          <label for="registerpassword">Password</label>
+          <input required type="password" name="password" class="form-control" id="registerpassword" ng-model="registrationformdata.password" ng-change="validate('registrationform')" placeholder="Dimitrios347">
+        </div>
+        <div class="form-group">
+          <label for="registerconpassword">Confirm Password</label>
+          <input required type="password" name="conpassword" class="form-control" id="registerconpassword" ng-model="registrationformdata.conpassword" ng-change="validate('registrationform')" placeholder="Dimitrios347">
+        </div>
+        <button type="submit" class="btn btn-stevens">Register</button>
+      </form>
+    </div>
+    <div class="hidden-xs col-md-2"></div>
 
-<header>
-  <h1>Login</h1>
-</header>
-
-<section id="login-section">
-  <form ng-submit="verifyAndLogin()">
-    <h2>Email</h2><br>
-    <input required type="email" name="email" ng-model="loginformdata.email"><br>
-    <h2>Password</h2><br>
-    <input required type="password" name="password" ng-model="loginformdata.password"><br>
-    <button type="submit" id="submit" value="Submit">Login</button>
-  </form>
-</section>
-
-<hr>
+  </div>
+</div>

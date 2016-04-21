@@ -1,18 +1,34 @@
 <!-- Will be under the LoginController angularjs Controller -->
-<header>
-  <h1>Confirm Account</h1>
-</header>
 
-<hr>
+<div class="container login-section">
+  <div class="row">
+    <header class="col-xs-12">
+      <h1>Confirm Account</h1>
+    </header>
+  </div>
 
-<section id="login-section">
-  <form ng-submit="verifyAndConfirm()">
-    <h2>Email</h2><br>
-    <input required type="email" name="email" ng-model="confirmformdata.email"><br>
-    <h2>Code</h2><br>
-    <input required type="text" name="code" ng-model="confirmformdata.code"><br>
-    <button type="submit" id="submit" value="Submit">Confirm!</button>
-  </form>
-</section>
+  <hr>
 
-<hr>
+  <div class="row">
+  	<div class="col-xs-1 col-md-4"></div>
+    <div class="col-xs-10 col-md-4">
+      <form id="confirmform" ng-submit="verifyAndConfirm()">
+        <div class="form-group">
+          <label for="confirmemail">Email</label>
+          <input required type="email" name="email" class="form-control" id="confirmemail" ng-model="confirmformdata.email" ng-change="validate('confirmform')" placeholder="@stevens.edu Email">
+        </div>
+        <div class="form-group">
+          <label for="confirmpassword">Password</label>
+          <input required type="password" name="password" class="form-control" id="confirmpassword" ng-model="confirmformdata.password" ng-change="validate('confirmform')" placeholder="Dimitrios347">
+        </div>
+        <div class="form-group">
+          <label for="confirmcode">Code</label>
+          <input required type="text" name="code" class="form-control" id="confirmcode" ng-model="confirmformdata.code" ng-change="validate('confirmform')" placeholder="1870stevenstechx">
+        </div>
+        <button type="submit" class="btn btn-stevens">Confirm</button>
+      </form>
+    </div>
+    <div class="col-xs-1 col-md-4"></div>
+    
+  </div>
+</div>
