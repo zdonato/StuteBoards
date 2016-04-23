@@ -71,66 +71,12 @@ nav a:visited
 	height: 100px;
 }
 
-.thread
-{
-	width: 50%;
-	margin: 0 auto;
-	padding: 10px;
-}
-
-.thread .threadstart
-{
-	width: 100%;
-	background-color: white;
-	display: table;
-}
-
-.thread .threadstart img
-{
-	width: 20%;
-	height: 100px; 
-	/*change to auto for any actual image*/
-	float: left;
-}
-
-.thread .threadstart p
-{
-	width: calc(80% - 20px);
-	float: right;
-	padding: 10px;
-}
-
-.thread .threadcomment
-{
-	margin: 0 auto;
-	width: 80%;
-	background-color: lightgray;
-	display: table;
-	border-left: 1px solid #A9002F;
-	border-right: 1px solid #A9002F;
-	border-bottom: 1px solid #A9002F;
-}
-
-.thread .threadcomment img
-{
-	width: 20%;
-	height: 80px; 
-	/*change to auto for any actual image*/
-	float: left;
-}
-
-.thread .threadcomment p
-{
-	width: calc(80% - 20px);
-	float: right;
-	padding: 10px;
-}
-
 footer
 {
 	text-align: center;
 }
 
+/*Login Page CSS*/
 .login-section hr
 {
 	margin-top: 20px;
@@ -260,7 +206,119 @@ footer
 {
 	margin: 5px;
 	text-align: center;
-	color: #A9002F;
 	text-decoration: underline;
+	font-size: 1.25em;
 }
 
+/* unvisited link */
+#board-list div a:link {color: #A9002F;}
+/* visited link */
+#board-list div a:visited {color: #A9002F;}
+/* mouse over link */
+#board-list div a:hover {color: #520017;}
+/* selected link */
+#board-list div a:active {color: #520017;}
+
+#board-list div span
+{
+
+}
+
+/*Thread Create Form*/
+#thread-create-section label
+{
+	font-size: 1.25em;
+	color: #A9002F;
+}
+
+#thread-create-section label.error
+{
+	display: none;
+}
+
+#thread-create-section div.has-success input
+{
+	background-color: lightgreen;
+}
+
+#thread-create-section div.has-error input
+{
+	background-color: #ff8080;
+}
+
+#thread-create-section .btn
+{
+	font-size: 1.75em;
+	margin: 0 auto;
+	display: table;
+}
+
+#thread-create-section h1
+{
+	color: black;
+	font-size: 2.5em;
+	font-weight: bolder;
+	margin: 0 auto;
+	display: table;
+}
+
+#thread-create-section h2
+{
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+#thread-create-section input
+{
+	font-size: 1.25em;
+}
+
+/*Thread List CSS*/
+.threadlistheader h1
+{
+	color: black;
+	font-size: 2.75em;
+	font-weight: bolder;
+	margin: 0 auto;
+	display: table;
+}
+
+.threadlistheader h2
+{
+	color: #A9002F;
+	font-size: 2em;
+	margin: 0 auto;
+	display: table;
+
+}
+
+.thread 
+{
+	margin: 0 auto;
+	padding: 10px;
+	background-color: white;
+	border: 1px solid #A9002F;
+	border-radius: 4px;
+	margin-bottom: 10px;
+}
+
+#rcorners1 {
+    padding: 20px; 
+    width: 200px;
+    height: 150px; 
+}
+
+.thread a
+{
+	font-size: 1.5em;
+}
+
+/* unvisited link */
+.thread a:link {color: #A9002F;}
+/* visited link */
+.thread a:visited {color: #A9002F;}
+/* mouse over link */
+.thread a:hover {color: #520017;}
+/* selected link */
+.thread a:active {color: #520017;}

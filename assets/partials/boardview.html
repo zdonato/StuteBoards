@@ -1,63 +1,31 @@
-<section id="posts">
+<div class="row" id="thread-create-section">
+  <div class = "col-xs-1 col-md-2"></div>
+  <div class = "col-xs-10 col-md-8" ng-init="buildThreadListData()">
+    <h2>Create New Thread in</h2>
+    <h1>{{currentboardname}}</h1>
+    <form id="threadcreateform" ng-submit="verifyAndCreateThread()">
+      <div class="form-group">
+        <label for="threadname">New Thread Title</label>
+        <input required type="text" name="name" class="form-control" id="threadname" ng-model="createthreaddata.name" ng-change="validate('threadcreateform')" placeholder="e.g. DAE Hate CS347?">
+      </div>
+      <button type="submit" class="btn btn-stevens">Create</button>
+    </form>
+  </div>
+  <div class = "col-xs-1 col-md-2"></div>
+</div>
 
-      <article class="thread">
-        <div class="threadstart">
-          <div class="postinfo">
-            <span class="anon">Anonymous</span>
-            <span class="posttime">03/17/2015 18:47:13</span>
-            <span class="postnumber">No.604444021</span>
-          </div>
-          <img src="http://i.imgur.com/Avtmwu4.png" alt="Post Image">
-          <p>Post text goes here. Could be in greentext as well. Blibbity blobbity bloopity</p>
-        </div>
-        <div class="threadcomment">
-          <div class="postinfo">
-            <span class="anon">Anonymous</span>
-            <span class="posttime">03/17/2015 18:47:13</span>
-            <span class="postnumber">No.604444021</span>
-          </div>
-          <img src="http://i.imgur.com/Avtmwu4.png" alt="Comment Image">
-          <p>Lorem ipsum dolor sit amet, mei tation noster insolens ei, sumo audire ea vim, te nemore quodsi labores eum. Ut vide fastidii vel. Causae diceret insolens</p>
-        </div>
-        <div class="threadcomment">
-          <div class="postinfo">
-            <span class="anon">Anonymous</span>
-            <span class="posttime">03/17/2015 18:47:13</span>
-            <span class="postnumber">No.604444021</span>
-          </div>
-          <img src="http://i.imgur.com/Avtmwu4.png" alt="Comment Image">
-          <p>Lorem ipsum dolor sit amet, mei tation noster insolens ei, sumo audire ea vim, te nemore quodsi labores eum. Ut vide fastidii vel. Causae diceret insolens</p>
-        </div>
-      </article>
+<hr style="margin-top: 10px;margin-bottom: 10px;">
 
-      <article class="thread">
-        <div class="threadstart">
-          <div class="postinfo">
-            <span class="anon">Anonymous</span>
-            <span class="posttime">03/17/2015 18:47:13</span>
-            <span class="postnumber">No.604444021</span>
-          </div>
-          <img src="http://i.imgur.com/Avtmwu4.png" alt="Post Image">
-          <p>Post text goes here. Could be in greentext as well. Blibbity blobbity bloopity</p>
-        </div>
-        <div class="threadcomment">
-          <div class="postinfo">
-            <span class="anon">Anonymous</span>
-            <span class="posttime">03/17/2015 18:47:13</span>
-            <span class="postnumber">No.604444021</span>
-          </div>
-          <img src="http://i.imgur.com/Avtmwu4.png" alt="Comment Image">
-          <p>Lorem ipsum dolor sit amet, mei tation noster insolens ei, sumo audire ea vim, te nemore quodsi labores eum. Ut vide fastidii vel. Causae diceret insolens</p>
-        </div>
-        <div class="threadcomment">
-          <div class="postinfo">
-            <span class="anon">Anonymous</span>
-            <span class="posttime">03/17/2015 18:47:13</span>
-            <span class="postnumber">No.604444021</span>
-          </div>
-          <img src="http://i.imgur.com/Avtmwu4.png" alt="Comment Image">
-          <p>Lorem ipsum dolor sit amet, mei tation noster insolens ei, sumo audire ea vim, te nemore quodsi labores eum. Ut vide fastidii vel. Causae diceret insolens</p>
-        </div>
-      </article>
-
-    </section>
+<div class="row">
+  <div class = "col-xs-1 col-md-3"></div>
+  <div class="col-xs-10 col-md-6" id="threadlist">
+    <div class="threadlistheader">
+      <h2>Threads in</h2>
+      <h1>{{currentboardname}}</h1>
+    </div>
+    <hr style="margin-top: 10px;margin-bottom: 10px;">
+    <div class="thread" ng-repeat="thread in threadlist.data">
+      <a ng-href="#boards/{{boardid}}/{{pagenumber}}/{{thread.id}}"><span>{{thread.title}}</span></a>
+    </div>
+  <div class = "col-xs-1 col-md-3"></div>
+</div>

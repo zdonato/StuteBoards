@@ -216,9 +216,26 @@ myApp.controller('LoginController', ['$window','$scope', '$http', '$cookies', '$
 
   	$scope.logout = function() 
   	{
-  		console.log("logout");
 		$scope.deleteAllCookies();
 		$window.location.href = "/";
+		// 
+		var logoutdatatemp = {email:"",token:""};
+		if (email && token) 
+  		{
+        	logoutdatatemp.email = email;
+        	logoutdatatemp.token = token
+    	}
+  		$http.post("/rest/logout", logoutdatatemp)
+		.success(function(data)
+		{
+  			$scope.deleteAllCookies();
+  			$window.location.href = "/";
+  			//console.log("success logout");
+		})
+		.error(function(err)
+		{
+  			console.log(err);
+		});
   	};
 }]);
 
@@ -238,7 +255,7 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
 	$scope.showboardlist = true;
 	$scope.showthreadview = false;
 
-	$scope.boardid = 1;
+	$scope.boardid = 0;
 	$scope.pagenumber = 1;
 	$scope.threadid = 1;
 
@@ -251,7 +268,6 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
 		{
 			//get page number that is not an assumed 1
 			$scope.pagenumber = $scope.params.page;
-			console.log($scope.params.threadid);
 			if ($scope.params.threadid != null)
 			{
 				//We are viewing an individual thread
@@ -275,8 +291,12 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
   	$scope.bottomnavviewsrc = "/assets/partials/bottomnavview.html";
 
   	$scope.createboarddata = {name: ""}
+  	$scope.createthreaddata = {name: ""}
 
   	$scope.boardlist = {data: []};
+  	$scope.threadlist = {data: []};
+
+  	$scope.currentboardname = "";
 
   	//Create a new board
   	$scope.verifyAndCreateBoard = function() 
@@ -288,6 +308,26 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
         	submitdata.created_by = userid;
     	}
 		$http.post("/rest/boards", submitdata)
+		.success(function(data)
+		{
+  			$route.reload();
+		})
+		.error(function(err)
+		{
+  			deleteAllCookiesOnFail($cookies);
+  			$route.reload();
+		});
+  	};
+
+  	$scope.verifyAndCreateThread = function() 
+  	{
+  		var submitdata = {title:"", created_by:""};
+  		if ($scope.createthreaddata.name && userid) 
+  		{
+        	submitdata.title = $scope.createthreaddata.name;
+        	submitdata.created_by = userid;
+    	}
+		$http.post("/rest/boards/"+$scope.boardid, submitdata)
 		.success(function(data)
 		{
   			$route.reload();
@@ -329,6 +369,44 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
 			{
   				// deleteAllCookiesOnFail($cookies);
   				// $route.reload();
+  				console.log(err);
+			});
+  		}
+  	}
+
+  	$scope.buildThreadListData = function()
+  	{
+  		// Make sure to build board data
+  		$scope.buildBoardListData();
+  		// Have to wait for the board to be created
+  		$scope.$watch("boardlist.data", function()
+  		{
+  			// Get the name for this particular thread's board
+  			for(var i = 0; i < $scope.boardlist.data.length; i++)
+  			{
+  				if ($scope.boardlist.data[i].id == $scope.boardid)
+  				{
+  					$scope.currentboardname = $scope.boardlist.data[i].name;
+  				}
+  			}
+    	});
+
+  		// Get thread data for the board
+  		configobj = {data:null};
+  		configobj.data = {email: email, token: token};
+  		if(!(email == "" || token == ""))
+  		{
+  			$http.get("/rest/boards/"+$scope.boardid, configobj)
+			.success(function(data)
+			{
+  				$scope.threadlist.data = data.threads;
+  				// $scope.threadlist.data.sort(compareBoardName);
+			})
+			.error(function(err)
+			{
+  				// deleteAllCookiesOnFail($cookies);
+  				// $route.reload();
+  				console.log(err);
 			});
   		}
   	}
