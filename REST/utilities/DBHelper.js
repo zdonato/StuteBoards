@@ -432,6 +432,53 @@ define(function (require) {
         },
 
         /**
+         * Method to logout a user.
+         * @param email
+         * @param token
+         * @param callback
+         */
+        logoutUser : function (email, token, callback) 
+        {
+            var response = {};
+            if (_.isUndefined(email) || _.isUndefined(token))
+            {
+                console.log(timestamp() + "Error: no email or token provided.");
+
+                response.error = "Error no credentials provided";
+
+                callback(response);
+                return;
+            }
+
+            this.pool.getConnection(function (err, connection) {
+                if (err) {
+                    console.log(timestamp() + err);
+                    response.error = "Error connecting to database";
+                    connection.release();
+                    callback(response);
+                    return;
+                }
+
+                var sql = "UPDATE `users` SET `token`=NULL, `expire_time`=NULL WHERE `email`=? AND `token`=?";
+                connection.query(sql, [email, token], function (err, result){
+                    if (err || result.affectedRows === 0) {
+                        if (err) {console.log(timestamp() + err);}
+                        console.log(timestamp() + "Error logging out user " + email);
+                        response.error = "Error logging out user " + email;
+                        connection.release();
+                        callback(response);
+                        return;
+                    }
+
+                    response.message = email + " has been logged out";
+                    callback(response);
+                    connection.release();
+                    return;
+                });
+            });
+        },
+
+        /**
          * Method to create a board.
          * @param board_name
          * @param created_by
@@ -536,7 +583,8 @@ define(function (require) {
          * Method get all boards.
          * @param callback
          */
-        getAllBoards : function(callback) {
+        getAllBoards : function(callback)
+        {
             var sql = "SELECT `name`, `id`, `created_on` FROM `boards`";
             this.pool.getConnection(function (err, connection) {
 
@@ -552,9 +600,10 @@ define(function (require) {
                 connection.query(sql, function (err, result) {
                     if (err || _.isEmpty(result))
                     {
-                        console.log(timestamp() + "Error getting all boards");
+                        console.log(timestamp() + "Error: There are no boards created");
+                        if (err) {console.log(timestamp() + err);}
                         var response = {
-                            error : "Error retrieving all boards"
+                            error : "Error: There are no boards created"
                         };
                         connection.release();
                         callback(response);
@@ -577,7 +626,8 @@ define(function (require) {
          * @param token
          * @param callback
          */
-        authByUsernameAndToken : function (username, token, callback) {
+        authByUsernameAndToken : function (username, token, callback)
+        {
 
             if (_.isUndefined(username) || _.isUndefined(token))
             {
@@ -608,6 +658,8 @@ define(function (require) {
                     // Compare the provided token and the DB token.
                     var DB_token = result[0].token;
                     var expire_time = result[0].expire_time;
+                    console.log(expire_time);
+                    console.log(moment().format());
                     if (token != DB_token || moment().isAfter(moment(expire_time)))
                     {
                         console.log(timestamp() + "Error: user's token does not match the token in the database" +
@@ -631,7 +683,8 @@ define(function (require) {
          * @param boardID
          * @param callback
          */
-        getAllThreadsOfBoardByID : function(boardID, callback) {
+        getAllThreadsOfBoardByID : function(boardID, callback)
+        {
             if (_.isUndefined(boardID) || boardID === "" || boardID < 0) {
                 console.log(timestamp() + "Error: no id specified");
                 var response = {
@@ -695,10 +748,75 @@ define(function (require) {
          * @param created_by
          * @param callback
          */
-        createNewThreadForBoard : function (boardID, title, created_by, callback) {
-            if (_.isUndefined(boardID) || boardID === "" || boardID < 0) {
-                
+        createNewThreadForBoard : function (boardID, title, created_by, callback)
+        {
+            var response = {};
+            if (_.isUndefined(boardID) || isNaN(boardID) || boardID < 0) {
+                console.log(timestamp() + "Error: no id specified");
+                response.error = "Error: No board id supplied";
+                callback(response);
+                return;
             }
+
+            if (_.isUndefined(title) || title === "")
+            {
+                console.log(timestamp() + "Error: title is empty");
+                response.error = "Error: No title supplied";
+                callback(response);
+                return;
+            }
+
+            if (_.isUndefined(created_by) || isNaN(created_by) || created_by < 0)
+            {
+                console.log(timestamp() + "Error: no created_by supplied");
+                response.error = "Error: No created_by supplied";
+                callback(response);
+                return;
+            }
+
+            this.pool.getConnection(function (err, connection) {
+                if (err)
+                {
+                    console.log(timestamp() + err);
+                    response.error = "Error connecting to database";
+                    callback(response);
+                    return;
+                }
+
+                var sql = "INSERT INTO `threads` (`title`, `parent_id`, `created_by`, `created_on`) VALUES" +
+                        "(?,?,?,?)";
+                var created_on = moment().format();
+                connection.query(sql, [title, boardID, created_by, created_on], function (err, result) {
+                    if (err)
+                    {
+                        console.log(timestamp() + "Error creating thread " + title);
+                        console.log(timestamp() + err);
+                        response.error = "Error creating thread " + title;
+                        connection.release();
+                        callback(response);
+                        return;
+                    }
+
+                    // Query for the new thread to return it's id.
+                    var sql = "SELECT `id` FROM `threads` WHERE `title` = ? AND `created_by` = ? AND `created_on` = ?";
+                    connection.query(sql, [title, created_by, created_on], function (err, result){
+                        if (err || _.isEmpty(result) || result.length != 1)
+                        {
+                            console.log(timestamp() + "Error fetching thread " + title);
+                            if (err) { console.log(timestamp() + err); }
+                            response.error = "Error fetching thread " + title;
+                            connection.release();
+                            callback(response);
+                            return;
+                        }
+
+                        response.id = result[0].id;
+                        connection.release();
+                        callback(response);
+                        return;
+                    })
+                })
+            });
         }
     };
 

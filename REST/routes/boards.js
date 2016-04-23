@@ -1,6 +1,9 @@
 /**
  * Handles all of the board routes.
- * {"/board"}
+ * {
+ *  "/boards",
+ *  "/boards/:boardID
+ * }
  *
  */
 

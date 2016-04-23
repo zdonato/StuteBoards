@@ -117,3 +117,20 @@ ___
     "error" : "error message if error",
     "id" : thread_id
 }
+```
+
+### */rest/logout* => POST
+#### Body
+```
+{
+    "email" : "some-email@stevens.edu",
+    "token" : "auth token of user"
+}
+```
+#### Return
+```
+{
+    "error" : "some error message",
+    "message" : "email has been logged out"
+}
+```
