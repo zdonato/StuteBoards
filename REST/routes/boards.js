@@ -16,7 +16,7 @@ var DB_HELPER   = new DBHelper('stuteboards_boards');
 var jsonParser  = bodyParser.json();
 
 /**
- * @route("/rest/board")
+ * @route("/rest/boards")
  * @method("POST")
  *
  * Handles POST method to create a board.
@@ -35,7 +35,7 @@ router.post("/", jsonParser, cookieParser(), authenticate, function(req, res){
 });
 
 /**
- * @route("/rest/board")
+ * @route("/rest/boards")
  * @method("GET")
  *
  * Handles GET request to get all boards.
@@ -48,10 +48,52 @@ router.get("/", jsonParser, cookieParser(), authenticate, function(req, res) {
         if (response.error) {
             res.status(403).send(response);
         } else {
-            res.send(response);
+            res.status(200).send(response);
         }
     });
 
+});
+
+/**
+ * @route("/rest/boards/:boardID")
+ * @method("GET")
+ *
+ * Handles get request to a specific board.
+ * On success returns JSON data of all the posts for the board.
+ */
+router.get("/:boardID", jsonParser, cookieParser(), authenticate, function(req, res) {
+    console.log(timestamp() + "GET Request made to /rest/boards/" + req.params.boardID);
+
+    var id = req.params.boardID;
+    DB_HELPER.getAllThreadsOfBoardByID(id, function (response) {
+        if (response.error) {
+            res.status(403).send(response);
+        }
+        else {
+            res.status(200).send(response);
+        }
+    });
+});
+
+/**
+ * @route(/rest/boards/:boardID")
+ * @method("POST")
+ *
+ * Handles posts request to make a new thread on a specific board.
+ * On success returns JSON data of the id of the newly created board.
+ */
+router.post("/:boardID", jsonParser, cookieParser(), authenticate, function (req, res) {
+    console.log(timestamp() + "POST request made to /rest/boards/" + req.params.boardID);
+
+    var boardID = req.params.boardID;
+    DB_HELPER.createNewThreadForBoard(boardID, req.body.title, req.body.created_by, function (response) {
+        if (response.error) {
+           res.status(403).send(response);
+        }
+        else {
+            res.status(200).send(response);
+        }
+    });
 });
 
 module.exports = router;

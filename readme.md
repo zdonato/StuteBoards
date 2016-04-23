@@ -1,4 +1,4 @@
-# Stute Boards
+****# Stute Boards
 
 ## Rest API
 
@@ -63,7 +63,7 @@ ___
 ``` 
 {
     "board_name" : "name of board",
-    "created_by" : id of user,
+    "created_by" : id_of_user,
 }
 ```
 
@@ -73,7 +73,7 @@ ___
     "boards" : [
         {
             "name" : "name of board",
-            "id" : board id
+            "id" : board_id
             "created_on" : "moment string, formatted"
             "latest_post" : "moment string, formatted"
         }
@@ -85,6 +85,35 @@ ___
 {
     "error" : "error message if error",
     "board_name" : "name of board",
-    "id" : id of board
+    "id" : id_of_board
 }
 ```
+
+### */rest/boards/id* => GET, POST
+#### Body (POST only)
+```
+{
+    "title" : "thread title",
+    "created_by" : id_of_user
+}
+```
+#### Return GET
+```
+{
+    "threads" : [
+        {
+            "id" : thread_id,
+            "title" : "thread title",
+            "last_comment" : "moment string, formatted",
+            "parent_id" : id_of_board,
+            "created_on" : "moment string, formatted
+        }
+    ]
+}
+```
+#### Return POST
+```
+{
+    "error" : "error message if error",
+    "id" : thread_id
+}

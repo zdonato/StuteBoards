@@ -623,6 +623,82 @@ define(function (require) {
                     callback(true);
                 });
             });
+        },
+
+        /**
+         * Method to get all the threads of a given board.
+         *
+         * @param boardID
+         * @param callback
+         */
+        getAllThreadsOfBoardByID : function(boardID, callback) {
+            if (_.isUndefined(boardID) || boardID === "" || boardID < 0) {
+                console.log(timestamp() + "Error: no id specified");
+                var response = {
+                    error : "Error: No board id supplied"
+                };
+                callback(response);
+                return;
+            }
+
+            var sql = "SELECT `id`, `title`, `last_comment`, `parent_id`, `created_on` FROM `threads`" +
+                "WHERE `parent_id` = ?";
+            this.pool.getConnection(function (err, connection) {
+                if (err)
+                {
+                   console.log(timestamp() + err);
+                   var response = {
+                       error : "Error connecting to database"
+                   };
+                   callback(response);
+                   return;
+                }
+
+                connection.query(sql, boardID, function (err, result) {
+                    if (err) {
+                        console.log(timestamp() + err);
+                        connection.release();
+                        var response = {
+                            error : "Error fetching threads for this board"
+                        };
+                        callback(response);
+                        return;
+                    }
+
+                    if (_.isEmpty(result) || result.length < 1)
+                    {
+                        console.log(timestamp() + "There are no threads for board with id " + boardID);
+                        connection.release();
+                        var response = {
+                            error : "Error: There are no threads for this board"
+                        };
+                        callback(response);
+                        return;
+                    }
+
+                    var response = {
+                        threads : result
+                    };
+
+                    console.log(timestamp() + "Sending back " + response.threads.length + " threads");
+                    callback(response);
+                    connection.release();
+                });
+            });
+        },
+
+        /**
+         * Method to create a new thread for a board.
+         *
+         * @param boardID
+         * @param title
+         * @param created_by
+         * @param callback
+         */
+        createNewThreadForBoard : function (boardID, title, created_by, callback) {
+            if (_.isUndefined(boardID) || boardID === "" || boardID < 0) {
+                
+            }
         }
     };
 
