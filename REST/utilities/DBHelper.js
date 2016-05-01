@@ -696,6 +696,7 @@ define(function (require) {
 
             var sql = "SELECT `id`, `title`, `last_comment`, `parent_id`, `created_on` FROM `threads`" +
                 "WHERE `parent_id` = ?";
+            var getBoardNameSql = "SELECT `name` FROM `boards` WHERE id = ?";
             this.pool.getConnection(function (err, connection) {
                 if (err)
                 {
@@ -707,7 +708,8 @@ define(function (require) {
                    return;
                 }
 
-                connection.query(sql, boardID, function (err, result) {
+                // Get the baord name.
+                connection.query(getBoardNameSql, boardID, function (err, result) {
                     if (err) {
                         console.log(timestamp() + err);
                         connection.release();
@@ -718,24 +720,50 @@ define(function (require) {
                         return;
                     }
 
-                    if (_.isEmpty(result) || result.length < 1)
+                    if (_.isUndefined[result] || result.length == 0)
                     {
-                        console.log(timestamp() + "There are no threads for board with id " + boardID);
+                        console.log(timestamp() + "Board " + boardID + " does not exist");
                         connection.release();
                         var response = {
-                            error : "Error: There are no threads for this board"
+                            error: "Board does not exist"
                         };
                         callback(response);
                         return;
                     }
+                    var boardName = result[0].name;
 
-                    var response = {
-                        threads : result
-                    };
+                    connection.query(sql, boardID, function (err, result) {
+                        if (err) {
+                            console.log(timestamp() + err);
+                            connection.release();
+                            var response = {
+                                error : "Error fetching threads for this board"
+                            };
+                            callback(response);
+                            return;
+                        }
 
-                    console.log(timestamp() + "Sending back " + response.threads.length + " threads");
-                    callback(response);
-                    connection.release();
+                        if (_.isEmpty(result) || result.length < 1)
+                        {
+                            console.log(timestamp() + "There are no threads for board with id " + boardID);
+                            connection.release();
+                            var response = {
+                                error : "Error: There are no threads for this board"
+                            };
+                            callback(response);
+                            return;
+                        }
+
+                        var response = {
+                            id : boardID,
+                            board_name : boardName,
+                            threads : result
+                        };
+
+                        console.log(timestamp() + "Sending back " + response.threads.length + " threads");
+                        callback(response);
+                        connection.release();
+                    });
                 });
             });
         },

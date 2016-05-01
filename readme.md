@@ -100,6 +100,8 @@ ___
 #### Return GET
 ```
 {
+    "id" : "id of the board',
+    "board_name" : "name of the board
     "threads" : [
         {
             "id" : thread_id,
