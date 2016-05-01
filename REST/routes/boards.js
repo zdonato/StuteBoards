@@ -99,4 +99,48 @@ router.post("/:boardID", jsonParser, cookieParser(), authenticate, function (req
     });
 });
 
+/**
+ * @route(/rest/boards/:boardId/:threadID")
+ * @method("GET")
+ * 
+ * Handles get request to a specific thread to retrieve all of its comments.
+ */
+router.get("/:boardID/:threadID", jsonParser, cookieParser(), authenticate, function (req, res){
+    console.log(timestamp() + "GET request made to /rest/boards/" + req.params.boardID + "/" + req.params.threadID);
+    
+    var boardID = req.params.boardID;
+    var threadID = req.params.threadID;
+    
+    DB_HELPER.getAllCommentsOnThread(boardID, threadID, function (response) {
+       if (response.error) 
+       {
+           res.status(403).send(response);
+       } else {
+           res.status(200).send(response);
+       }
+    });
+});
+
+/**
+ * @route(/rest/boards/:boardID/:threadID")
+ * @method("POST")
+ *
+ * Handles post data to a specific thread, i.e. posting a comment to that thread.
+ */
+router.post("/:boardID/:threadID", jsonParser, cookieParser(), authenticate, function(req, res) {
+    console.log(timestamp() + "POST request made to /rest/boards/" + req.params.boardID + "/" + req.params.threadID);
+
+    var boardID = req.params.boardID;
+    var threadID = req.params.threadID;
+
+    DB_HELPER.postCommentOnThread(boardID, threadID, req.body.body, req.body.created_by, function (response) {
+        if (response.error) {
+            res.status(403).send(response);
+        } else
+        {
+            res.status(200).send(response);
+        }
+    })
+});
+
 module.exports = router;

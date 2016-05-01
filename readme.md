@@ -119,6 +119,37 @@ ___
 }
 ```
 
+### */rest/boards/boardID/threadID* => GET, POST
+#### Body (POST only)
+```
+{
+    "body" : "Body of the comment",
+    "created_by" : "id of user that created the comment"
+}
+```
+
+#### Return POST
+```
+{
+    "error" : "error message if error",
+    "message" : "success message"
+}
+```
+
+#### Return GET
+```
+{
+    "comments" : [
+        {
+            "id" : "comment id",
+            "body" : "comment body",
+            "created_on" : "moment timestamp",
+            "parent_id" : "id of thread the comment resides in"
+        }
+    ]
+}
+```
+
 ### */rest/logout* => POST
 #### Body
 ```

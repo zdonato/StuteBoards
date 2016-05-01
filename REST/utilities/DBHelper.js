@@ -817,7 +817,150 @@ define(function (require) {
                     })
                 })
             });
+        },
+
+        /** Method to get all comments of a thread
+         * @param boardID,
+         * @param threadID,
+         * @param callback
+         */
+        getAllCommentsOnThread : function (boardID, threadID, callback) {
+            var response = {};
+            if (_.isUndefined(boardID) || boardID === "" || boardID < 1 || isNaN(boardID))
+            {
+                console.log(timestamp() + "Error invalid boardID supplied");
+                response.error = "Error invalid boardID supplied";
+                callback(response);
+                return;
+            }
+            if (_.isUndefined(threadID) || threadID === "" || threadID < 1 || isNaN(threadID))
+            {
+                console.log(timestamp() + "Error invalid threadID supplied");
+                response.error = "Error invalid threadID supplied";
+                callback(response);
+                return;
+            }
+
+            this.pool.getConnection(function (err, connection) {
+                if (err)
+                {
+                    console.log(timestamp() + err);
+                    response.error = "Error conencting to database.";
+                    callback(response);
+                    return;
+                }
+
+                var sql = "SELECT `id`, `body`, `created_on`, `parent_id` FROM `comments` WHERE `parent_id` = ?";
+                connection.query(sql, threadID, function (err, result) {
+                    if (err)
+                    {
+                        console.log(timestamp() + err);
+                        response.error = "Error connecting to database.";
+                        connection.release();
+                        callback(response);
+                        return;
+                    }
+
+                    if (_.isUndefined(result) || result.length == 0){
+                        console.log(timestamp() + "Thread " + threadID + " has no comments or does not exist.");
+                        response.error = "Thread does not exist or has no comments.";
+                        connection.release();
+                        callback(response);
+                        return;
+                    }
+
+                    response.comments = result;
+                    connection.release();
+                    callback(response);
+                    return;
+                });
+            });
+        },
+
+        /**
+         * Method to post a comment on a thread.
+         *
+         * @param boardID,
+         * @param threadID,
+         * @param body
+         * @param created_by
+         * @param callback
+         */
+        postCommentOnThread : function(boardID, threadID, body, created_by, callback) {
+            var response = {};
+
+            if (_.isUndefined(boardID) || boardID === "" || boardID < 1 || isNaN(boardID))
+            {
+                console.log(timestamp() + "Error invalid boardID supplied");
+                response.error = "Error invalid boardID supplied";
+                callback(response);
+                return;
+            }
+            if (_.isUndefined(threadID) || threadID === "" || threadID < 1 || isNaN(threadID))
+            {
+                console.log(timestamp() + "Error invalid threadID supplied");
+                response.error = "Error invalid threadID supplied";
+                callback(response);
+                return;
+            }
+            if (_.isUndefined(body) || body === "")
+            {
+                console.log(timestamp() + "Error no body supplied");
+                response.error = "Error no body supplied";
+                callback(response);
+                return;
+            }
+            if (_.isUndefined(created_by) || created_by === "" || created_by < 1 || isNaN(created_by))
+            {
+                console.log(timestamp() + "Error invalid created_by supplied");
+                response.error = "Error invalid created_by supplied";
+                callback(response);
+                return;
+            }
+
+            this.pool.getConnection(function (err, connection){
+                if (err)
+                {
+                    console.log(err);
+                    response.error = "There was an error connecting to the database.";
+                    callback(response);
+                    return;
+                }
+
+                var sql = "INSERT INTO `comments` (`body`, `parent_id`, `created_on`, `created_by`) VALUES (?, ?, ?, ?)";
+                var created_on = moment().format();
+                connection.query(sql, [body, threadID, created_on, created_by], function (err, result) {
+                    if (err)
+                    {
+                        console.log(timestamp() + "Error creating comment");
+                        console.log(timestamp() + err);
+                        response.error = "Error creating comment";
+                        connection.release();
+                        callback(response);
+                        return;
+                    }
+
+                    // Update the thread to show the last comment.
+                    var updateSql = "UPDATE `threads` SET `last_comment`=? WHERE `id`=?";
+                    connection.query(updateSql, [created_on, threadID], function (err, result) {
+                        if (err) {
+                            console.log(timestamp() + "Error updating thread with last comment");
+                            console.log(timestamp() + err);
+                            response.error = "Error updating thread with last comment.";
+                            connection.release();
+                            callback(response);
+                            return;
+                        }
+
+                        response.message = "Successfully added comment";
+                        callback(response);
+                        connection.release();
+                        return;
+                    })
+                });
+            });
         }
+
     };
 
     return DBHelper;
