@@ -1,4 +1,4 @@
-/*4chan peach: #FFCCAA*/
+4chan peach: #FFCCAA*/
 /*Stevens Red: #A9002F*/
 *
 {
@@ -303,10 +303,11 @@ footer
 	margin-bottom: 10px;
 }
 
-#rcorners1 {
-    padding: 20px; 
-    width: 200px;
-    height: 150px; 
+.threaddate
+{
+	font-size: .75em;
+	color: #A9002F;
+	display: table;
 }
 
 .thread a
@@ -322,3 +323,56 @@ footer
 .thread a:hover {color: #520017;}
 /* selected link */
 .thread a:active {color: #520017;}
+
+
+/*Comment List CSS*/
+#comment-create-section h1
+{
+	color: black;
+	font-size: 2.5em;
+	font-weight: bolder;
+	margin: 0 auto;
+	display: table;
+}
+
+#comment-create-section h2
+{
+	color: #A9002F;
+	margin: 0 auto;
+	display: table;
+}
+
+.commentlistheader h1
+{
+	color: black;
+	font-size: 2.75em;
+	font-weight: bolder;
+	margin: 0 auto;
+	display: table;
+}
+
+.commentlistheader h2
+{
+	color: #A9002F;
+	font-size: 2em;
+	margin: 0 auto;
+	display: table;
+}
+
+.comment
+{
+	margin: 0 auto;
+	padding: 10px;
+	background-color: white;
+	border: 1px solid #A9002F;
+	border-radius: 4px;
+	margin-bottom: 10px;
+	font-size: 1.10em;
+}
+
+.commentdate
+{
+	font-size: .75em;
+	color: #A9002F;
+	display: table;
+}

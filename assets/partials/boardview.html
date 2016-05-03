@@ -6,7 +6,7 @@
     <form id="threadcreateform" ng-submit="verifyAndCreateThread()">
       <div class="form-group">
         <label for="threadname">New Thread Title</label>
-        <input required type="text" name="name" class="form-control" id="threadname" ng-model="createthreaddata.name" ng-change="validate('threadcreateform')" placeholder="e.g. DAE Hate CS347?">
+        <input required type="text" name="name" class="form-control" id="threadname" ng-model="createthreaddata.name" ng-change="validate('threadcreateform')" placeholder="e.g. DAE Love CS347?">
       </div>
       <button type="submit" class="btn btn-stevens">Create</button>
     </form>
@@ -25,6 +25,7 @@
     </div>
     <hr style="margin-top: 10px;margin-bottom: 10px;">
     <div class="thread" ng-repeat="thread in threadlist.data">
+      <span class="threaddate">{{formatDate(thread.last_comment)}}</span>
       <a ng-href="#boards/{{boardid}}/{{pagenumber}}/{{thread.id}}"><span>{{thread.title}}</span></a>
     </div>
   <div class = "col-xs-1 col-md-3"></div>

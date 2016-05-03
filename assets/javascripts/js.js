@@ -248,6 +248,47 @@ function compareBoardName(a,b) {
     return 0;
 }
 
+//Most Recent Thread on Top
+function compareThreadName(a,b) 
+{
+	var beginningTime
+	if(a.last_comment == null)
+	{
+		beginningTime = moment(a.created_on);
+	}
+	else
+	{
+		beginningTime = moment(a.last_comment)
+	}
+
+	var endTime
+	if(b.last_comment == null)
+	{
+		endTime = moment(b.created_on);
+	}
+	else
+	{
+		endTime = moment(b.last_comment)
+	}
+
+  	if (beginningTime.isBefore(endTime))
+    	return 1;
+    else
+    	return -1;
+}
+
+//Most Recent Comments on bottom
+function compareCommentBody(a,b) 
+{
+  	var beginningTime = moment(a.created_on);
+	var endTime = moment(b.created_on);
+
+  	if (beginningTime.isBefore(endTime))
+    	return 1;
+    else
+    	return -1;
+}
+
 myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$location', '$route', '$routeParams', function($window, $scope, $http, $cookies, $location, $route, $routeParams) 
 {
 	$scope.params = $routeParams;
@@ -257,7 +298,7 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
 
 	$scope.boardid = 0;
 	$scope.pagenumber = 1;
-	$scope.threadid = 1;
+	$scope.threadid = 0;
 
 	if($scope.params.boardid != null)
 	{
@@ -292,11 +333,14 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
 
   	$scope.createboarddata = {name: ""}
   	$scope.createthreaddata = {name: ""}
+  	$scope.createcommentdata = {body: ""}
 
   	$scope.boardlist = {data: []};
   	$scope.threadlist = {data: []};
+  	$scope.commentlist = {data: []};
 
   	$scope.currentboardname = "";
+  	$scope.currentthreadname = "";
 
   	//Create a new board
   	$scope.verifyAndCreateBoard = function() 
@@ -339,9 +383,32 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
 		});
   	};
 
+  	$scope.verifyAndCreateComment = function() 
+  	{
+  		var submitdata = {body:"", created_by:""};
+  		if ($scope.createcommentdata.body && userid) 
+  		{
+        	submitdata.body = $scope.createcommentdata.body;
+        	submitdata.created_by = userid;
+    	}
+		$http.post("/rest/boards/"+$scope.boardid+"/"+$scope.threadid, submitdata)
+		.success(function(data)
+		{
+			console.log(data);
+  			$route.reload();
+		})
+		.error(function(err)
+		{
+			console.log(err);
+  			deleteAllCookiesOnFail($cookies);
+  			$route.reload();
+		});
+  	};
+
   	$scope.validate = function(_formid)
 	{
-		$('#'+_formid).validate({ // initialize the plugin
+		$('#'+_formid).validate(
+		{ // initialize the plugin
         	highlight: function(element) 
         	{
     			$(element).parent().addClass("has-error").removeClass("has-success");
@@ -376,31 +443,19 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
 
   	$scope.buildThreadListData = function()
   	{
-  		// Make sure to build board data
-  		$scope.buildBoardListData();
-  		// Have to wait for the board to be created
-  		$scope.$watch("boardlist.data", function()
-  		{
-  			// Get the name for this particular thread's board
-  			for(var i = 0; i < $scope.boardlist.data.length; i++)
-  			{
-  				if ($scope.boardlist.data[i].id == $scope.boardid)
-  				{
-  					$scope.currentboardname = $scope.boardlist.data[i].name;
-  				}
-  			}
-    	});
-
   		// Get thread data for the board
   		configobj = {data:null};
   		configobj.data = {email: email, token: token};
-  		if(!(email == "" || token == ""))
+  		if(!(email == "" || token == "") && ($scope.boardid != 0))
   		{
   			$http.get("/rest/boards/"+$scope.boardid, configobj)
 			.success(function(data)
 			{
+				// Thread Data
   				$scope.threadlist.data = data.threads;
-  				// $scope.threadlist.data.sort(compareBoardName);
+  				$scope.threadlist.data.sort(compareThreadName);
+  				// Board name for these threads
+  				$scope.currentboardname = data.board_name;
 			})
 			.error(function(err)
 			{
@@ -410,10 +465,57 @@ myApp.controller('BoardController', ['$window','$scope', '$http', '$cookies', '$
 			});
   		}
   	}
+
+  	$scope.buildCommentListData = function()
+  	{
+  		// Make sure to build thread data
+  		$scope.buildThreadListData();
+  		// Have to wait for the board to be created
+
+  		$scope.$watch("threadlist.data", function()
+  		{
+  			// Get the name for this particular thread's board
+  			for(var i = 0; i < $scope.threadlist.data.length; i++)
+  			{
+  				if ($scope.threadlist.data[i].id == $scope.threadid)
+  				{
+  					$scope.currentthreadname = $scope.threadlist.data[i].title;
+  					console.log($scope.threadlist.data[i].title);
+  				}
+  			}
+    	});
+
+  		// Get thread data for the board
+  		configobj = {data:null};
+  		configobj.data = {email: email, token: token};
+  		if(!(email == "" || token == "") && ($scope.threadid != 0))
+  		{
+  			$http.get("/rest/boards/"+$scope.boardid+"/"+$scope.threadid, configobj)
+			.success(function(data)
+			{
+  				$scope.commentlist.data = data.comments;
+  				$scope.threadlist.data.sort(compareCommentBody);
+			})
+			.error(function(err)
+			{
+  				console.log(err);
+			});
+  		}
+  	}
+
+  	$scope.formatDate = function(_string)
+  	{
+  		if(_string == null)
+  		{
+  			return "No Comments Yet..."
+  		}
+  		return moment(_string).format('LLL');
+  	}
 }]);
 
 $(document).ready(function()
 {
+	moment().format();
 	console.log(email);
   	console.log(userid);
   	console.log(token);

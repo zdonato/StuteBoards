@@ -1,1 +1,29 @@
-<div>Is is a thread of id {{threadid}}</div>
+<div class="row" id="comment-create-section">
+  <div class = "col-xs-1 col-md-2"></div>
+  <div class = "col-xs-10 col-md-8" ng-init="buildCommentListData()">
+    <h2>Comment in</h2>
+    <h1>{{currentthreadname}}</h1>
+    <form id="commentcreateform" ng-submit="verifyAndCreateComment()">
+      <div class="form-group">
+        <label for="commentname">New Comment</label>
+        <textarea required type="text" name="name" class="form-control" id="commentname" ng-model="createcommentdata.body" ng-change="validate('commentcreateform')" rows="5" placeholder="I know, right?"></textarea>
+      </div>
+      <button type="submit" class="btn btn-stevens">Create</button>
+    </form>
+  </div>
+  <div class = "col-xs-1 col-md-2"></div>
+</div>
+
+<div class="row">
+  <div class = "col-xs-1 col-md-2"></div>
+  <div class="col-xs-10 col-md-8" id="commentlist">
+    <div class="commentlistheader">
+      <h1>{{currentthreadname}}</h1>
+    </div>
+    <hr style="margin-top: 10px;margin-bottom: 10px;">
+    <div class="comment" ng-repeat="comment in commentlist.data">
+      <span class="commentdate">{{formatDate(comment.created_on)}}</span>
+      <span>{{comment.body}}</span>
+    </div>
+  <div class = "col-xs-1 col-md-2"></div>
+</div>
