@@ -13,8 +13,9 @@ define(function (require) {
     var crypto          = require('crypto');
     var bcrypt          = require('bcrypt');
     var nodemailer      = require('nodemailer');
-    var transporter     = nodemailer.createTransport('smtps://stuteboards%40gmail.com:StuteBoards123@@smtp.gmail.com');
+    var transporter     = nodemailer.createTransport(emailInfo);
     var config          = require('../utilities/config.js')
+    var emailInfo       = require('./emailInfo');
     const saltRounds    = 10;
 
     // Constructor. Call with the database you want to connect to.
@@ -437,7 +438,7 @@ define(function (require) {
          * @param token
          * @param callback
          */
-        logoutUser : function (email, token, callback) 
+        logoutUser : function (email, token, callback)
         {
             var response = {};
             if (_.isUndefined(email) || _.isUndefined(token))
