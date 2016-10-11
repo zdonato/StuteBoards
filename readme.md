@@ -1,4 +1,4 @@
-****# Stute Boards
+# Stute Boards
 
 ## Rest API
 
